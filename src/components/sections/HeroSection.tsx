@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { StoreBadge } from "../ui/store-badge";
 
 export const HeroSection = () => {
   return (
@@ -49,19 +50,8 @@ export const HeroSection = () => {
 
             {/* Store Badges */}
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-              <button className="bg-black text-white px-8 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-800 transition-colors">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.05 20.28c-.98.95-2.05.88-3.08.41-1.07-.48-2.09-.48-3.19 0-1.35.62-2.24.51-3.08-.41C3.21 15.64 3.86 8.37 9.09 8.13c1.09.07 1.88.56 2.77.56.84 0 1.71-.56 2.91-.56 1.89.06 3.31.95 4.14 2.48-3.52 2.17-2.94 6.89.14 9.67zM15.84 6.41c.73-.96 1.25-2.29 1.05-3.66-1.06.13-2.27.89-2.97 1.85-.66.78-1.19 2.06-1.02 3.42 1.14.05 2.33-.74 2.94-1.61z"/>
-                </svg>
-                App Store
-              </button>
-              <button className="bg-black text-white px-8 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-800 transition-colors">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M3.5 3.75a.25.25 0 01.25-.25h13.5a.25.25 0 01.25.25v10a.75.75 0 001.5 0v-10A1.75 1.75 0 0017.25 2H3.75A1.75 1.75 0 002 3.75v16.5c0 .966.784 1.75 1.75 1.75h7.5a.75.75 0 000-1.5h-7.5a.25.25 0 01-.25-.25V3.75z"/>
-                  <path d="M6.25 7a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm-.75 4.75a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75zm16.28 4.53a.75.75 0 10-1.06-1.06l-4.97 4.97-1.97-1.97a.75.75 0 10-1.06 1.06l2.5 2.5a.75.75 0 001.06 0l5.5-5.5z"/>
-                </svg>
-                Google Play
-              </button>
+              <StoreBadge type="apple" href="https://apps.apple.com/app/xlinic" />
+              <StoreBadge type="google" href="https://play.google.com/store/apps/details?id=com.xlinic" />
             </div>
           </motion.div>
 

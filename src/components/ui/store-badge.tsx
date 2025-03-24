@@ -17,9 +17,9 @@ export function StoreBadge({ type, href }: StoreBadgeProps) {
       <Image
         src={`/images/${type}-store-badge.svg`}
         alt={`Download on ${type === 'apple' ? 'App Store' : 'Google Play'}`}
-        width={type === 'apple' ? 120 : 135}
-        height={40}
-        className="h-[40px] w-auto"
+        width={type === 'apple' ? 180 : 200}
+        height={60}
+        className="h-[60px] w-auto"
       />
     </Link>
   );

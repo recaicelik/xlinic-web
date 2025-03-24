@@ -70,13 +70,11 @@ export const Footer = () => {
           {/* Logo and Description */}
           <div className="col-span-1 lg:col-span-1">
             <Link href="/" className="flex items-center">
-              <Image
-                src="/images/logo.png"
-                alt="Xlinic Logo"
-                width={120}
-                height={40}
-                className="h-8 w-auto"
-              />
+              <svg width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10">
+                <circle cx="16" cy="16" r="15" className="fill-blue-500/10 stroke-blue-500 dark:fill-blue-400/10 dark:stroke-blue-400" strokeWidth="2"/>
+                <path d="M12 10L20 22M20 10L12 22" className="stroke-blue-500 dark:stroke-blue-400" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M16 8V12M14 10H18" className="stroke-blue-500 dark:stroke-blue-400" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
             </Link>
             <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
               Sağlık hizmetlerine erişimi kolaylaştırıyor, hayatınızı iyileştiriyoruz.

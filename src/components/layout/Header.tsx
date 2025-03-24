@@ -20,7 +20,7 @@ export const Header = () => {
           {/* Logo and Company Name */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
+              <svg width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10">
                 <circle cx="16" cy="16" r="15" className="fill-blue-500/10 stroke-blue-500 dark:fill-blue-400/10 dark:stroke-blue-400" strokeWidth="2"/>
                 <path d="M12 10L20 22M20 10L12 22" className="stroke-blue-500 dark:stroke-blue-400" strokeWidth="2" strokeLinecap="round"/>
                 <path d="M16 8V12M14 10H18" className="stroke-blue-500 dark:stroke-blue-400" strokeWidth="2" strokeLinecap="round"/>
