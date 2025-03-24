@@ -5,7 +5,6 @@ import Image from 'next/image';
 
 const footerLinks = {
   company: [
-    { name: 'Hakkımızda', href: '/about' },
     { name: 'Kariyer', href: '/careers' },
     { name: 'Basın', href: '/press' },
     { name: 'Blog', href: '/blog' },
@@ -19,7 +18,6 @@ const footerLinks = {
   support: [
     { name: 'Yardım Merkezi', href: '/help' },
     { name: 'SSS', href: '/faq' },
-    { name: 'İletişim', href: '/contact' },
     { name: 'Randevu İptali', href: '/cancel-appointment' },
   ],
 };
@@ -69,12 +67,13 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Logo and Description */}
           <div className="col-span-1 lg:col-span-1">
-            <Link href="/" className="flex items-center">
-              <svg width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10">
-                <circle cx="16" cy="16" r="15" className="fill-blue-500/10 stroke-blue-500 dark:fill-blue-400/10 dark:stroke-blue-400" strokeWidth="2"/>
-                <path d="M12 10L20 22M20 10L12 22" className="stroke-blue-500 dark:stroke-blue-400" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M16 8V12M14 10H18" className="stroke-blue-500 dark:stroke-blue-400" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
+            <Link href="/" className="flex items-center gap-2">
+              <div className="text-3xl font-bold tracking-tighter text-gray-900 dark:text-white" style={{ fontFamily: 'system-ui' }}>
+                X
+              </div>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
+                linic
+              </span>
             </Link>
             <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
               Sağlık hizmetlerine erişimi kolaylaştırıyor, hayatınızı iyileştiriyoruz.

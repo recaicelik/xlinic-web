@@ -6,16 +6,9 @@ import { StoreBadge } from "../ui/store-badge";
 
 export const HeroSection = () => {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#ffffff] to-[#f3f4ff] dark:from-gray-950 dark:to-gray-900 relative overflow-hidden">
-      {/* Background Gradients */}
-      <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-yellow-300 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+    <section className="min-h-screen flex flex-col items-center justify-start bg-white relative overflow-hidden">
+      <div className="container mx-auto px-4 pt-2 pb-16 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left Column - Text Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -23,30 +16,14 @@ export const HeroSection = () => {
             transition={{ duration: 0.5 }}
             className="text-center lg:text-left"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Sağlık Uzmanlarına
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+              Yapay Zeka Destekli
               <br />
-              <span className="text-blue-600">Anında Ulaşın</span>
+              <span className="text-blue-600">Sağlık Asistanınız</span>
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-              Xlinic ile sağlık uzmanlarına 7/24 ulaşın, randevularınızı yönetin ve sağlığınızı takip edin.
+            <p className="text-lg text-gray-600 mb-8">
+              Test sonuçlarınızı analiz eden, sağlık verilerinizi takip eden ve size özel öneriler sunan akıllı sağlık asistanı.
             </p>
-
-            {/* Stats */}
-            <div className="flex flex-wrap justify-center lg:justify-start gap-12 mb-12">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">100K+</div>
-                <div className="text-sm text-gray-500">Kullanıcı</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">1000+</div>
-                <div className="text-sm text-gray-500">Uzman</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">50+</div>
-                <div className="text-sm text-gray-500">Uzmanlık</div>
-              </div>
-            </div>
 
             {/* Store Badges */}
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
@@ -65,7 +42,6 @@ export const HeroSection = () => {
             <div className="relative mx-auto max-w-[300px] lg:max-w-[400px]">
               {/* iPhone Mockup */}
               <div className="relative">
-                <div className="absolute inset-0 bg-blue-100 rounded-[3rem] transform rotate-6 scale-95 opacity-20"></div>
                 <div className="relative bg-black rounded-[3rem] overflow-hidden shadow-2xl">
                   {/* Status Bar */}
                   <div className="relative bg-black pt-12">
@@ -97,7 +73,6 @@ export const HeroSection = () => {
               {/* Apple Watch */}
               <div className="absolute -right-16 bottom-0 w-48">
                 <div className="relative">
-                  <div className="absolute inset-0 bg-blue-100 rounded-3xl transform -rotate-6 scale-95 opacity-20"></div>
                   <div className="relative bg-black rounded-3xl overflow-hidden shadow-xl">
                     <Image
                       src="/images/example.png"
