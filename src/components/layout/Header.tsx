@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { translations } from '@/translations';
 
 export const Header = () => {
@@ -19,25 +19,62 @@ export const Header = () => {
     { name: t.features.water.title, href: '/#water' },
   ];
 
-  const handleFeatureClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleFeatureClick = async (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const targetId = href.split('#')[1];
-    const element = document.getElementById(targetId);
     
-    if (element) {
-      const offset = 80; // Header yüksekliği için offset
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+    // Check if we're not on the home page
+    if (window.location.pathname !== '/') {
+      // Store the target ID in sessionStorage
+      sessionStorage.setItem('scrollTarget', targetId);
+      // Navigate to home page
+      window.location.href = '/';
+      return;
     }
+    
+    const scrollToElement = () => {
+      const element = document.getElementById(targetId);
+      if (element) {
+        const offset = 80; // Header yüksekliği için offset
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
 
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    };
+
+    // If we're already on the home page, scroll immediately
+    scrollToElement();
     setIsFeatureDropdownOpen(false);
     setIsMobileMenuOpen(false);
   };
+
+  // Add effect to handle scroll after navigation
+  useEffect(() => {
+    const scrollTarget = sessionStorage.getItem('scrollTarget');
+    if (scrollTarget) {
+      // Clear the stored target
+      sessionStorage.removeItem('scrollTarget');
+      
+      // Wait for the page to load and then scroll
+      setTimeout(() => {
+        const element = document.getElementById(scrollTarget);
+        if (element) {
+          const offset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    }
+  }, []);
 
   return (
     <header className="bg-white dark:bg-gray-900 relative z-40">
@@ -99,6 +136,14 @@ export const Header = () => {
               style={{ fontFamily: 'system-ui' }}
             >
               {t.nav.blog}
+            </Link>
+
+            <Link
+              href="/faq"
+              className="text-base text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-normal"
+              style={{ fontFamily: 'system-ui' }}
+            >
+              {t.nav.faq}
             </Link>
           </div>
 
@@ -173,6 +218,12 @@ export const Header = () => {
                 className="block px-3 py-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 {t.nav.blog}
+              </Link>
+              <Link
+                href="/faq"
+                className="block px-3 py-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+              >
+                {t.nav.faq}
               </Link>
               <Link
                 href="/#try-xlinic"

@@ -32,7 +32,8 @@ export const translations = {
     },
     nav: {
       features: 'Özellikler',
-      blog: 'Blog'
+      blog: 'Blog',
+      faq: 'SSS'
     }
   },
   en: {
@@ -68,7 +69,8 @@ export const translations = {
     },
     nav: {
       features: 'Features',
-      blog: 'Blog'
+      blog: 'Blog',
+      faq: 'FAQ'
     }
   }
 }; 
