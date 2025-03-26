@@ -2,45 +2,64 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/translations';
 
 export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFeatureDropdownOpen, setIsFeatureDropdownOpen] = useState(false);
-  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-  const { language, setLanguage } = useLanguage();
-
-  const t = translations[language];
+  
+  const t = translations['en'];
 
   const features = [
     { name: t.features.healthTest.title, href: '/#health-test' },
+    { name: t.features.medication.title, href: '/#medication' },
     { name: t.features.symptoms.title, href: '/#symptoms' },
     { name: t.features.skinAnalysis.title, href: '/#skin-analysis' },
     { name: t.features.calories.title, href: '/#calories' },
     { name: t.features.water.title, href: '/#water' },
   ];
 
+  const handleFeatureClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const targetId = href.split('#')[1];
+    const element = document.getElementById(targetId);
+    
+    if (element) {
+      const offset = 80; // Header yüksekliği için offset
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+
+    setIsFeatureDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className="bg-white dark:bg-gray-900 relative z-40">
-      <nav className="mx-auto max-w-7xl px-6 h-12">
-        <div className="flex h-12 items-center">
+      <nav className="mx-auto max-w-7xl px-6">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo and Company Name */}
-          <div className="flex-shrink-0">
+          <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              <span className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white" style={{ fontFamily: 'Inter' }}>
+              <span className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white" style={{ fontFamily: 'Inter' }}>
                 Xlinic
               </span>
             </Link>
           </div>
 
           {/* Desktop Navigation - Centered */}
-          <div className="hidden md:flex flex-1 justify-center items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-16">
             {/* Features Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setIsFeatureDropdownOpen(!isFeatureDropdownOpen)}
-                className="text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
+                className="text-base text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 font-normal"
+                style={{ fontFamily: 'system-ui' }}
               >
                 {t.nav.features}
                 <svg
@@ -52,7 +71,6 @@ export const Header = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-
               {/* Dropdown Menu */}
               {isFeatureDropdownOpen && (
                 <div className="absolute left-0 mt-2 w-72 rounded-xl bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
@@ -61,14 +79,12 @@ export const Header = () => {
                       <Link
                         key={feature.name}
                         href={feature.href}
-                        onClick={() => {
-                          setIsFeatureDropdownOpen(false);
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="group flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-800/40"
+                        onClick={(e) => handleFeatureClick(e, feature.href)}
+                        className="group flex items-center px-4 py-3 text-base text-gray-500 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 font-normal"
+                        style={{ fontFamily: 'system-ui' }}
                       >
                         <div>
-                          <p className="font-medium">{feature.name}</p>
+                          <p className="font-normal">{feature.name}</p>
                         </div>
                       </Link>
                     ))}
@@ -79,68 +95,22 @@ export const Header = () => {
 
             <Link
               href="/blog"
-              className="text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+              className="text-base text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-normal"
+              style={{ fontFamily: 'system-ui' }}
             >
               {t.nav.blog}
             </Link>
           </div>
 
-          {/* Language Selector */}
-          <div className="ml-auto flex items-center space-x-4">
-            <div className="relative">
-              <button
-                onClick={() => setIsLanguageDropdownOpen((prev) => !prev)}
-                className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-              >
-                {language === 'tr' ? (
-                  <>
-                    <span className="text-xl">🇹🇷</span>
-                    <span>Türkçe</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-xl">🇬🇧</span>
-                    <span>English</span>
-                  </>
-                )}
-                <svg
-                  className={`ml-1 h-4 w-4 transition-transform ${isLanguageDropdownOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {/* Language Dropdown */}
-              {isLanguageDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                  <div className="py-2">
-                    <button
-                      onClick={() => {
-                        setLanguage('tr');
-                        setIsLanguageDropdownOpen(false);
-                      }}
-                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-800/40"
-                    >
-                      <span className="text-xl">🇹🇷</span>
-                      <span>Türkçe</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setLanguage('en');
-                        setIsLanguageDropdownOpen(false);
-                      }}
-                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-800/40"
-                    >
-                      <span className="text-xl">🇬🇧</span>
-                      <span>English</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+          {/* Try Xlinic Button */}
+          <div className="flex items-center">
+            <Link 
+              href="/#try-xlinic" 
+              onClick={(e) => handleFeatureClick(e, '/#try-xlinic')}
+              className="bg-black hover:bg-gray-900 text-white text-lg font-medium px-6 py-2 rounded-full transition-all transform hover:scale-105 hover:shadow-lg"
+            >
+              Try Xlinic
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -150,7 +120,7 @@ export const Header = () => {
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              <span className="sr-only">Ana menüyü aç</span>
+              <span className="sr-only">Open main menu</span>
               {!isMobileMenuOpen ? (
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -188,10 +158,7 @@ export const Header = () => {
                     <Link
                       key={feature.name}
                       href={feature.href}
-                      onClick={() => {
-                        setIsFeatureDropdownOpen(false);
-                        setIsMobileMenuOpen(false);
-                      }}
+                      onClick={(e) => handleFeatureClick(e, feature.href)}
                       className="flex items-center px-3 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
                     >
                       <div>
@@ -206,6 +173,13 @@ export const Header = () => {
                 className="block px-3 py-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 {t.nav.blog}
+              </Link>
+              <Link
+                href="/#try-xlinic"
+                onClick={(e) => handleFeatureClick(e, '/#try-xlinic')}
+                className="block mt-2 text-center px-3 py-2 bg-black text-white rounded-full"
+              >
+                Try Xlinic
               </Link>
             </div>
           </div>

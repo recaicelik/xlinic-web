@@ -2,12 +2,16 @@ export const translations = {
   tr: {
     hero: {
       title: 'Sağlığınızı yapay zeka ile kolayca takip edin.',
-      description: 'Test sonuçlarınızdan cilt analizine, semptom takibinden beslenme önerilerine kadar tüm sağlık ihtiyaçlarınız için akıllı asistanınız.'
+      description: 'Gelişmiş yapay zeka ile güçlendirilmiş kapsamlı sağlık asistanınız. Test sonuçlarından cilt analizine, semptom takibinden kişiselleştirilmiş beslenme planlarına kadar - tüm sağlık ihtiyaçlarınız için tek ve kesintisiz bir deneyim.'
     },
     features: {
       healthTest: {
         title: 'Sağlık Testi Analizi',
         description: 'Yapay zeka destekli sağlık testi analizi ile sağlığınızı anlık olarak takip edin. Detaylı test sonuçlarınızı görüntüleyin ve kişiselleştirilmiş öneriler alın.'
+      },
+      medication: {
+        title: 'İlaç Takibi',
+        description: 'İlaçlarınızı düzenli kullanmanız için akıllı hatırlatmalar alın. İlaç kullanım geçmişinizi takip edin ve yan etkileri kolayca raporlayın.'
       },
       symptoms: {
         title: 'Semptom Takibi & Değerlendirme',
@@ -34,12 +38,16 @@ export const translations = {
   en: {
     hero: {
       title: 'Track your health with AI effortlessly.',
-      description: 'Your smart assistant for all your health needs - from test results to skin analysis, symptom tracking to nutrition recommendations.'
+      description: 'Your comprehensive health companion powered by advanced AI. From analyzing test results and monitoring symptoms to providing personalized nutrition plans and detailed skin assessments - all your health needs in one seamless experience.'
     },
     features: {
       healthTest: {
         title: 'Health Test Analysis',
         description: 'Monitor your health in real-time with AI-powered health test analysis. View detailed test results and receive personalized recommendations.'
+      },
+      medication: {
+        title: 'Medication Tracking',
+        description: 'Get smart reminders to take your medications regularly. Track your medication history and easily report side effects.'
       },
       symptoms: {
         title: 'Symptom Tracking & Assessment',
