@@ -1,106 +1,182 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { translations } from '@/translations';
+import { useState, useEffect, useRef } from 'react';
+import toast from 'react-hot-toast';
+
+const features = [
+  {
+    name: 'Smart Test Analysis',
+    href: '#health-test',
+  },
+  {
+    name: 'Symptom Tracking',
+    href: '#symptoms',
+  },
+  {
+    name: 'Skin Analysis',
+    href: '#skin-analysis',
+  },
+  {
+    name: 'Health App Integration',
+    href: '#integration',
+  },
+  {
+    name: 'Calorie Tracking',
+    href: '#calories',
+  },
+  {
+    name: 'Water Tracking',
+    href: '#water',
+  },
+  {
+    name: 'Medication Reminders',
+    href: '#medication',
+  },
+  {
+    name: 'Health Reports',
+    href: '#reports',
+  },
+];
 
 export const Header = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFeatureDropdownOpen, setIsFeatureDropdownOpen] = useState(false);
-  
-  const t = translations['en'];
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const features = [
-    { name: t.features.healthTest.title, href: '/#health-test' },
-    { name: t.features.medication.title, href: '/#medication' },
-    { name: t.features.symptoms.title, href: '/#symptoms' },
-    { name: t.features.skinAnalysis.title, href: '/#skin-analysis' },
-    { name: t.features.calories.title, href: '/#calories' },
-    { name: t.features.water.title, href: '/#water' },
-  ];
+  // Menü açıkken scroll'u engelle
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
 
-  const handleFeatureClick = async (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  const handleScrollToSection = (e: React.MouseEvent<HTMLElement>, href?: string) => {
     e.preventDefault();
-    const targetId = href.split('#')[1];
+    const targetId = href ? href.replace('#', '') : 'coming-soon';
+    const element = document.getElementById(targetId);
     
-    // Check if we're not on the home page
-    if (window.location.pathname !== '/') {
-      // Store the target ID in sessionStorage
-      sessionStorage.setItem('scrollTarget', targetId);
-      // Navigate to home page
-      window.location.href = '/';
-      return;
+    if (element) {
+      const offset = 30; // Reduced offset for better consistency
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
     
-    const scrollToElement = () => {
-      const element = document.getElementById(targetId);
-      if (element) {
-        const offset = 80; // Header yüksekliği için offset
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    };
-
-    // If we're already on the home page, scroll immediately
-    scrollToElement();
     setIsFeatureDropdownOpen(false);
     setIsMobileMenuOpen(false);
   };
 
-  // Add effect to handle scroll after navigation
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        buttonRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsFeatureDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Add click outside listener for mobile menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const mobileMenu = document.querySelector('.mobile-menu-container');
+      const menuButton = document.querySelector('.mobile-menu-button');
+      
+      if (
+        mobileMenu &&
+        menuButton &&
+        !mobileMenu.contains(event.target as Node) &&
+        !menuButton.contains(event.target as Node)
+      ) {
+        setIsMobileMenuOpen(false);
+        setIsFeatureDropdownOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    // Check if there's a stored scroll target
     const scrollTarget = sessionStorage.getItem('scrollTarget');
     if (scrollTarget) {
       // Clear the stored target
       sessionStorage.removeItem('scrollTarget');
-      
-      // Wait for the page to load and then scroll
-      setTimeout(() => {
-        const element = document.getElementById(scrollTarget);
-        if (element) {
-          const offset = 80;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - offset;
+      // Get the element and scroll to it
+      const element = document.getElementById(scrollTarget.replace('#', ''));
+      if (element) {
+        const offset = 30; // Use same offset as handleScrollToSection
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - offset;
 
+        setTimeout(() => {
           window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
           });
-        }
-      }, 100);
+        }, 100);
+      }
     }
   }, []);
 
   return (
     <header className="bg-white dark:bg-gray-900 relative z-40">
       <nav className="mx-auto max-w-7xl px-6">
-        <div className="flex h-20 items-center justify-between">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo and Company Name */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center">
+            <a href="/" className="flex items-center">
               <span className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white" style={{ fontFamily: 'Inter' }}>
                 Xlinic
               </span>
-            </Link>
+            </a>
           </div>
 
-          {/* Desktop Navigation - Centered */}
-          <div className="hidden md:flex items-center space-x-16">
+          {/* Desktop Navigation and Try Button - Right Aligned */}
+          <div className="hidden md:flex items-center space-x-12">
             {/* Features Dropdown */}
             <div className="relative">
               <button
-                onClick={() => setIsFeatureDropdownOpen(!isFeatureDropdownOpen)}
-                className="text-base text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 font-normal"
+                ref={buttonRef}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsFeatureDropdownOpen(!isFeatureDropdownOpen);
+                }}
+                onMouseDown={(e) => e.preventDefault()}
+                className="text-xl text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 font-normal"
                 style={{ fontFamily: 'system-ui' }}
               >
-                {t.nav.features}
+                Features
                 <svg
-                  className={`ml-1 h-4 w-4 transition-transform ${isFeatureDropdownOpen ? 'rotate-180' : ''}`}
+                  className={`ml-1 h-5 w-5 transition-transform duration-300 ${isFeatureDropdownOpen ? 'rotate-180' : ''}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -108,21 +184,49 @@ export const Header = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              {/* Dropdown Menu */}
+              
               {isFeatureDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-72 rounded-xl bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                  <div className="py-2">
+                <div 
+                  ref={dropdownRef}
+                  className="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/10 focus:outline-none z-50"
+                >
+                  <div className="py-2 space-y-1">
                     {features.map((feature) => (
                       <Link
                         key={feature.name}
                         href={feature.href}
-                        onClick={(e) => handleFeatureClick(e, feature.href)}
-                        className="group flex items-center px-4 py-3 text-base text-gray-500 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 font-normal"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsFeatureDropdownOpen(false);
+                          
+                          if (window.location.pathname !== '/') {
+                            sessionStorage.setItem('scrollTarget', feature.href);
+                            window.location.href = '/';
+                          } else {
+                            // Desktop specific scroll behavior
+                            const targetId = feature.href.replace('#', '');
+                            console.log('Desktop scroll target:', targetId);
+                            const element = document.getElementById(targetId);
+                            
+                            if (element) {
+                              console.log('Desktop element found:', element);
+                              const offset = 30;
+                              const elementPosition = element.getBoundingClientRect().top;
+                              const offsetPosition = elementPosition + window.scrollY - offset;
+
+                              window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                              });
+                            } else {
+                              console.log('Desktop element not found:', targetId);
+                            }
+                          }
+                        }}
+                        className="block w-full px-4 py-2 text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
                         style={{ fontFamily: 'system-ui' }}
                       >
-                        <div>
-                          <p className="font-normal">{feature.name}</p>
-                        </div>
+                        {feature.name}
                       </Link>
                     ))}
                   </div>
@@ -130,66 +234,95 @@ export const Header = () => {
               )}
             </div>
 
+            {/* Desktop Navigation Links */}
             <Link
               href="/blog"
-              className="text-base text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-normal"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/blog';
+              }}
+              className="text-xl text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-normal"
               style={{ fontFamily: 'system-ui' }}
             >
-              {t.nav.blog}
+              Blog
             </Link>
 
             <Link
               href="/faq"
-              className="text-base text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-normal"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/faq';
+              }}
+              className="text-xl text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-normal"
               style={{ fontFamily: 'system-ui' }}
             >
-              {t.nav.faq}
+              FAQ
             </Link>
-          </div>
 
-          {/* Try Xlinic Button */}
-          <div className="flex items-center">
-            <Link 
-              href="/#try-xlinic" 
-              onClick={(e) => handleFeatureClick(e, '/#try-xlinic')}
-              className="bg-black hover:bg-gray-900 text-white text-lg font-medium px-6 py-2 rounded-full transition-all transform hover:scale-105 hover:shadow-lg"
+            {/* Try Xlinic Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                if (window.location.pathname !== '/') {
+                  sessionStorage.setItem('scrollTarget', '#coming-soon');
+                  window.location.href = '/';
+                } else {
+                  const element = document.getElementById('coming-soon');
+                  if (element) {
+                    const offset = 30;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.scrollY - offset;
+
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+                  }
+                }
+              }}
+              className="px-6 py-2.5 bg-black text-white text-lg font-medium rounded-xl hover:bg-gray-900 transition-all duration-200 hover:shadow-lg"
+              style={{ fontFamily: 'system-ui' }}
             >
               Try Xlinic
-            </Link>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden ml-4">
+          <div className="md:hidden">
             <button
               type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+              className="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
-              {!isMobileMenuOpen ? (
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              ) : (
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              )}
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+        {/* Mobile Menu Overlay and Drawer */}
+        <div 
+          className={`mobile-menu-container md:hidden fixed top-[64px] right-0 w-[300px] h-[calc(100vh-64px)] bg-white dark:bg-gray-900 shadow-[0_0_40px_rgba(0,0,0,0.1)] z-[100] transform transition-all duration-500 ease-in-out rounded-l-2xl border-l border-gray-100 dark:border-gray-800 ${
+            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          <div className="h-full px-4 py-4 flex flex-col overflow-y-auto">
+            <div className="space-y-3 flex-1">
               <button
-                onClick={() => setIsFeatureDropdownOpen(!isFeatureDropdownOpen)}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsFeatureDropdownOpen(!isFeatureDropdownOpen);
+                }}
+                onMouseDown={(e) => e.preventDefault()}
+                className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
+                style={{ fontFamily: 'system-ui' }}
               >
-                <span>{t.nav.features}</span>
+                <span>Features</span>
                 <svg
-                  className={`ml-1 h-4 w-4 transition-transform ${isFeatureDropdownOpen ? 'rotate-180' : ''}`}
+                  className={`ml-1 h-5 w-5 transition-transform duration-300 ${isFeatureDropdownOpen ? 'rotate-180' : ''}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -197,44 +330,123 @@ export const Header = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
+              
               {isFeatureDropdownOpen && (
-                <div className="pl-4">
+                <div className="pl-4 space-y-1.5">
                   {features.map((feature) => (
                     <Link
                       key={feature.name}
                       href={feature.href}
-                      onClick={(e) => handleFeatureClick(e, feature.href)}
-                      className="flex items-center px-3 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsFeatureDropdownOpen(false);
+                        
+                        if (window.location.pathname !== '/') {
+                          sessionStorage.setItem('scrollTarget', feature.href);
+                          window.location.href = '/';
+                        } else {
+                          // Mobile specific scroll behavior
+                          const targetId = feature.href.replace('#', '');
+                          console.log('Mobile scroll target:', targetId);
+                          const element = document.getElementById(targetId);
+                          
+                          if (element) {
+                            console.log('Mobile element found:', element);
+                            const offset = 30;
+                            const elementPosition = element.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.scrollY - offset;
+
+                            // First scroll to the position
+                            window.scrollTo({
+                              top: offsetPosition,
+                              behavior: 'smooth'
+                            });
+
+                            // Then close the mobile menu after a small delay
+                            setTimeout(() => {
+                              setIsMobileMenuOpen(false);
+                            }, 500);
+                          } else {
+                            console.log('Mobile element not found:', targetId);
+                          }
+                        }
+                      }}
+                      className="block w-full px-4 py-2 text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 rounded-xl transition-all duration-200"
+                      style={{ fontFamily: 'system-ui' }}
                     >
-                      <div>
-                        <p>{feature.name}</p>
-                      </div>
+                      {feature.name}
                     </Link>
                   ))}
                 </div>
               )}
-              <Link
-                href="/blog"
-                className="block px-3 py-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-              >
-                {t.nav.blog}
-              </Link>
-              <Link
-                href="/faq"
-                className="block px-3 py-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-              >
-                {t.nav.faq}
-              </Link>
-              <Link
-                href="/#try-xlinic"
-                onClick={(e) => handleFeatureClick(e, '/#try-xlinic')}
-                className="block mt-2 text-center px-3 py-2 bg-black text-white rounded-full"
-              >
-                Try Xlinic
-              </Link>
+
+              <div className="space-y-1.5">
+                <Link
+                  href="/blog"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMobileMenuOpen(false);
+                    window.location.href = '/blog';
+                  }}
+                  className="block w-full px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
+                  style={{ fontFamily: 'system-ui' }}
+                >
+                  Blog
+                </Link>
+                <Link
+                  href="/faq"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMobileMenuOpen(false);
+                    window.location.href = '/faq';
+                  }}
+                  className="block w-full px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
+                  style={{ fontFamily: 'system-ui' }}
+                >
+                  FAQ
+                </Link>
+              </div>
             </div>
+
+            {/* Mobile Try Xlinic Button */}
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                if (window.location.pathname !== '/') {
+                  sessionStorage.setItem('scrollTarget', '#coming-soon');
+                  window.location.href = '/';
+                } else {
+                  const element = document.getElementById('coming-soon');
+                  console.log('Mobile Try Xlinic target:', 'coming-soon'); // Debug log
+                  
+                  if (element) {
+                    console.log('Mobile Try Xlinic element found:', element); // Debug log
+                    const offset = 30;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.scrollY - offset;
+
+                    // First scroll to the position
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+
+                    // Then close the mobile menu after a small delay
+                    setTimeout(() => {
+                      setIsMobileMenuOpen(false);
+                    }, 500);
+                  } else {
+                    console.log('Mobile Try Xlinic element not found'); // Debug log
+                  }
+                }
+              }}
+              className="w-full mt-6 px-6 py-3 bg-black text-white text-lg font-medium rounded-xl hover:bg-gray-900 transition-all duration-200 hover:shadow-lg"
+              style={{ fontFamily: 'system-ui' }}
+            >
+              Try Xlinic
+            </button>
           </div>
-        )}
+        </div>
       </nav>
     </header>
   );

@@ -5,32 +5,32 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const faqs = [
   {
-    question: "Xlinic nasıl çalışır?",
-    answer: "Xlinic, yapay zeka teknolojisini kullanarak sağlık verilerinizi analiz eder. Test sonuçlarınızın fotoğrafını çekerek veya yükleyerek anında analiz alabilir, semptomlarınızı takip edebilir ve kişiselleştirilmiş sağlık önerileri alabilirsiniz."
+    question: "How does Xlinic work?",
+    answer: "Xlinic analyzes your health data using artificial intelligence technology. You can get instant analysis by taking a photo or uploading your test results, track your symptoms, and receive personalized health recommendations."
   },
   {
-    question: "Test sonuçlarımı nasıl analiz edebilirim?",
-    answer: "Test sonuçlarınızın fotoğrafını çekmeniz veya PDF dosyasını yüklemeniz yeterli. Yapay zeka teknolojimiz sonuçları otomatik olarak analiz eder ve anlaşılır bir rapor hazırlar."
+    question: "How can I analyze my test results?",
+    answer: "Simply take a photo of your test results or upload a PDF file. Our AI technology automatically analyzes the results and prepares an easy-to-understand report."
   },
   {
-    question: "Verilerim güvende mi?",
-    answer: "Evet, verilerinizin güvenliği bizim için çok önemli. En yüksek güvenlik standartlarını kullanıyor ve verilerinizi şifreleyerek saklıyoruz. Verileriniz sadece sizin izin verdiğiniz ölçüde kullanılır."
+    question: "Is my data secure?",
+    answer: "Yes, your data security is very important to us. We use the highest security standards and store your data in encrypted form. Your data is only used to the extent you permit."
   },
   {
-    question: "Cilt analizi nasıl yapılıyor?",
-    answer: "Cilt analizini yapmak için cildinizin fotoğrafını çekmeniz yeterli. Yapay zeka teknolojimiz, cildinizin durumunu analiz eder ve kişiselleştirilmiş bakım önerileri sunar."
+    question: "How is skin analysis performed?",
+    answer: "To perform skin analysis, simply take a photo of your skin. Our AI technology analyzes your skin condition and provides personalized care recommendations."
   },
   {
-    question: "Kalori takibini nasıl yapabilirim?",
-    answer: "Yemeklerinizin fotoğrafını çekerek kolayca kalori takibi yapabilirsiniz. Yapay zeka teknolojimiz yemeğinizi tanır ve besin değerlerini otomatik olarak hesaplar."
+    question: "How can I track calories?",
+    answer: "You can easily track calories by taking photos of your meals. Our AI technology recognizes your food and automatically calculates nutritional values."
   },
   {
-    question: "Uygulama ücretli mi?",
-    answer: "Uygulamanın temel özellikleri ücretsizdir. Premium özellikler için aylık veya yıllık abonelik planlarımız bulunmaktadır."
+    question: "Is the app paid?",
+    answer: "Basic features of the app are free. We have monthly or yearly subscription plans for premium features."
   },
   {
-    question: "Doktorumla sonuçları paylaşabilir miyim?",
-    answer: "Evet, analiz sonuçlarınızı ve sağlık verilerinizi doktorunuzla kolayca paylaşabilirsiniz. PDF formatında detaylı raporlar oluşturabilir ve bunları istediğiniz kişilerle paylaşabilirsiniz."
+    question: "Can I share results with my doctor?",
+    answer: "Yes, you can easily share your analysis results and health data with your doctor. You can create detailed reports in PDF format and share them with anyone you want."
   }
 ];
 
@@ -75,17 +75,17 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
 
 export default function FAQPage() {
   return (
-    <main className="min-h-screen pt-24 pb-16 bg-white dark:bg-gray-900">
+    <main className="min-h-screen pt-12 pb-16 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
           >
-            Sıkça Sorulan Sorular
+            Frequently Asked Questions
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -93,7 +93,7 @@ export default function FAQPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-lg text-gray-600 dark:text-gray-300"
           >
-            Xlinic hakkında merak ettiğiniz her şey
+            Everything you need to know about Xlinic
           </motion.p>
         </div>
 
@@ -107,9 +107,9 @@ export default function FAQPage() {
         {/* Contact Section */}
         <div className="text-center mt-16">
           <p className="text-gray-600 dark:text-gray-300">
-            Başka sorularınız mı var?{' '}
+            Have more questions?{' '}
             <a href="mailto:support@xlinic.com" className="text-blue-600 dark:text-blue-400 hover:underline">
-              Bize ulaşın
+              Contact us
             </a>
           </p>
         </div>
