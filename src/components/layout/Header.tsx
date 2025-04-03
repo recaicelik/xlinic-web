@@ -170,7 +170,6 @@ export const Header = () => {
                   e.stopPropagation();
                   setIsFeatureDropdownOpen(!isFeatureDropdownOpen);
                 }}
-                onMouseDown={(e) => e.preventDefault()}
                 className="text-xl text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 font-normal"
                 style={{ fontFamily: 'system-ui' }}
               >
@@ -311,100 +310,52 @@ export const Header = () => {
           <div className="h-full px-4 py-4 flex flex-col overflow-y-auto">
             <div className="space-y-3 flex-1">
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsFeatureDropdownOpen(!isFeatureDropdownOpen);
+                onClick={() => {
+                  if (window.location.pathname !== '/') {
+                    sessionStorage.setItem('scrollTarget', '#health-test');
+                    window.location.href = '/';
+                  } else {
+                    const element = document.getElementById('health-test');
+                    if (element) {
+                      const offset = 30;
+                      const elementPosition = element.getBoundingClientRect().top;
+                      const offsetPosition = elementPosition + window.scrollY - offset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                      });
+                    }
+                  }
+                  setIsMobileMenuOpen(false);
                 }}
-                onMouseDown={(e) => e.preventDefault()}
-                className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
+                className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
                 style={{ fontFamily: 'system-ui' }}
               >
-                <span>Features</span>
-                <svg
-                  className={`ml-1 h-5 w-5 transition-transform duration-300 ${isFeatureDropdownOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
+                Features
               </button>
-              
-              {isFeatureDropdownOpen && (
-                <div className="pl-4 space-y-1.5">
-                  {features.map((feature) => (
-                    <Link
-                      key={feature.name}
-                      href={feature.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsFeatureDropdownOpen(false);
-                        
-                        if (window.location.pathname !== '/') {
-                          sessionStorage.setItem('scrollTarget', feature.href);
-                          window.location.href = '/';
-                        } else {
-                          // Mobile specific scroll behavior
-                          const targetId = feature.href.replace('#', '');
-                          console.log('Mobile scroll target:', targetId);
-                          const element = document.getElementById(targetId);
-                          
-                          if (element) {
-                            console.log('Mobile element found:', element);
-                            const offset = 30;
-                            const elementPosition = element.getBoundingClientRect().top;
-                            const offsetPosition = elementPosition + window.scrollY - offset;
-
-                            // First scroll to the position
-                            window.scrollTo({
-                              top: offsetPosition,
-                              behavior: 'smooth'
-                            });
-
-                            // Then close the mobile menu after a small delay
-                            setTimeout(() => {
-                              setIsMobileMenuOpen(false);
-                            }, 500);
-                          } else {
-                            console.log('Mobile element not found:', targetId);
-                          }
-                        }
-                      }}
-                      className="block w-full px-4 py-2 text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 rounded-xl transition-all duration-200"
-                      style={{ fontFamily: 'system-ui' }}
-                    >
-                      {feature.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
 
               <div className="space-y-1.5">
-                <Link
-                  href="/blog"
-                  onClick={(e) => {
-                    e.preventDefault();
+                <button
+                  onClick={() => {
                     setIsMobileMenuOpen(false);
                     window.location.href = '/blog';
                   }}
-                  className="block w-full px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
+                  className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
                   style={{ fontFamily: 'system-ui' }}
                 >
                   Blog
-                </Link>
-                <Link
-                  href="/faq"
-                  onClick={(e) => {
-                    e.preventDefault();
+                </button>
+                <button
+                  onClick={() => {
                     setIsMobileMenuOpen(false);
                     window.location.href = '/faq';
                   }}
-                  className="block w-full px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
+                  className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
                   style={{ fontFamily: 'system-ui' }}
                 >
                   FAQ
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -417,26 +368,19 @@ export const Header = () => {
                   window.location.href = '/';
                 } else {
                   const element = document.getElementById('coming-soon');
-                  console.log('Mobile Try Xlinic target:', 'coming-soon'); // Debug log
-                  
                   if (element) {
-                    console.log('Mobile Try Xlinic element found:', element); // Debug log
                     const offset = 30;
                     const elementPosition = element.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.scrollY - offset;
 
-                    // First scroll to the position
                     window.scrollTo({
                       top: offsetPosition,
                       behavior: 'smooth'
                     });
 
-                    // Then close the mobile menu after a small delay
                     setTimeout(() => {
                       setIsMobileMenuOpen(false);
                     }, 500);
-                  } else {
-                    console.log('Mobile Try Xlinic element not found'); // Debug log
                   }
                 }
               }}

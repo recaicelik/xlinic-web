@@ -1,15 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-
-type Feature = {
-  title: string;
-  description: string;
-  image: string;
-  id: string;
-};
 
 const features = [
   {
@@ -86,7 +77,7 @@ export const FeaturesSection = () => {
             <div
               key={feature.id}
               id={feature.id}
-              className="bg-gray-100/80 dark:bg-gray-800/40 rounded-3xl overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              className="scroll-mt-24 bg-gray-100/80 dark:bg-gray-800/40 rounded-3xl overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               <div className="flex flex-col md:flex-row items-center">
                 <div className="flex-1 p-8 md:p-12">
@@ -102,7 +93,10 @@ export const FeaturesSection = () => {
                     src={feature.image}
                     alt={feature.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
                     className="object-cover"
+                    loading="lazy"
+                    quality={75}
                   />
                 </div>
               </div>

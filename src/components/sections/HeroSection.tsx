@@ -5,19 +5,7 @@ import Image from "next/image";
 
 export const HeroSection = () => {
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-gray-900">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/pattern.svg"
-          alt=""
-          aria-hidden="true"
-          fill
-          className="object-cover opacity-5"
-          priority
-        />
-      </div>
-
+    <section className="relative min-h-[calc(100vh-48px)] pt-12 pb-32 flex items-center justify-center overflow-hidden bg-white dark:bg-gray-900">
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         <motion.h1
@@ -34,7 +22,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mb-12"
+          className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mb-16"
           style={{ fontFamily: 'system-ui' }}
         >
           Transform your health journey with advanced AI technology. Get personalized insights, track your progress, and make informed decisions about your well-being.
@@ -45,7 +33,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="relative flex items-center justify-center mt-8"
+          className="relative flex items-center justify-center mt-12"
         >
           {/* First Phone - Slightly behind */}
           <motion.div
