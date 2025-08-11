@@ -19,10 +19,6 @@ const features = [
     href: '#skin-analysis',
   },
   {
-    name: 'Medication Reminders',
-    href: '#medication',
-  },
-  {
     name: 'Health Reports',
     href: '#reports',
   }
@@ -285,15 +281,13 @@ export const Header = () => {
             {/* Login Button */}
             <Link href="/auth">
               <motion.button
-                className="px-6 py-2.5 bg-blue-600 text-white text-lg font-medium rounded-xl hover:bg-blue-700 transition-all duration-200 hover:shadow-lg"
+                className="group relative px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                 style={{ fontFamily: 'system-ui' }}
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.4)"
-                }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Log In
+                <span className="relative z-10">Log In</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </motion.button>
             </Link>
           </motion.div>
@@ -406,12 +400,13 @@ export const Header = () => {
                 >
                   <Link href="/auth">
                     <motion.button 
-                      className="w-full px-6 py-3 bg-blue-600 text-white text-lg font-medium rounded-xl hover:bg-blue-700 transition-all duration-200 hover:shadow-lg"
+                      className="group relative w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                       style={{ fontFamily: 'system-ui' }}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
-                      Log In
+                      <span className="relative z-10">Log In</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </motion.button>
                   </Link>
                 </motion.div>

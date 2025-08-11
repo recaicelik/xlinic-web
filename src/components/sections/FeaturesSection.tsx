@@ -225,16 +225,13 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
             }}
           >
             <motion.button 
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.4)"
-              }}
-              whileTap={{ scale: 0.95 }}
+              className="group relative inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              Download App
+              <span className="relative z-10">Download App</span>
               <motion.svg 
-                className="w-4 h-4" 
+                className="w-4 h-4 relative z-10" 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -243,6 +240,7 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </motion.svg>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.button>
             <motion.div
               className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
@@ -257,12 +255,9 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
         ) : (
           <Link href="/auth">
             <motion.button 
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.4)"
-              }}
-              whileTap={{ scale: 0.95 }}
+              className="group relative inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { 
@@ -272,9 +267,9 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
                 }
               }}
             >
-              Try Now
+              <span className="relative z-10">Try Now</span>
               <motion.svg 
-                className="w-4 h-4" 
+                className="w-4 h-4 relative z-10" 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -283,6 +278,7 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </motion.svg>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.button>
           </Link>
         )}
@@ -327,11 +323,11 @@ export const FeaturesSection = () => {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section ref={sectionRef} className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+    <section ref={sectionRef} className="pt-0 pb-12 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div 
-          className="text-center mb-16"
+          className="text-center mb-4"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8 }}
@@ -368,7 +364,7 @@ export const FeaturesSection = () => {
 
         {/* Bottom CTA */}
         <motion.div 
-          className="mt-24 text-center"
+          className="mt-12 text-center"
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8, delay: 0.6 }}
@@ -410,14 +406,15 @@ export const FeaturesSection = () => {
                 </motion.button>
               </Link>
               <motion.button 
-                className="px-8 py-4 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <span className="flex items-center gap-2">
+                <span className="relative z-10 flex items-center gap-2">
                   <span>📱</span>
                   Download App
                 </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </motion.button>
               <Link href="/faq">
                 <motion.button 
