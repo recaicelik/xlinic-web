@@ -1,129 +1,436 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { useInView } from 'framer-motion';
+import { useRef } from 'react';
 
 const features = [
   {
     id: 'health-test',
-    title: "Smart Test Analysis",
-    description: "Simply snap a photo of your lab results for instant AI analysis. Our advanced technology identifies normal and abnormal values, providing personalized insights and actionable recommendations for your health journey.",
-    image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&auto=format&fit=crop&q=60"
+    title: "Smart Lab Analysis",
+    subtitle: "Instant Results in Seconds",
+    description: "Upload your lab results and get AI-powered analysis instantly. Our advanced technology identifies normal and abnormal values, providing personalized insights and actionable recommendations for your health journey.",
+    benefits: ["Instant Analysis", "Personalized Insights", "Actionable Recommendations"],
+    image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&auto=format&fit=crop&q=60",
+    icon: "🔬"
   },
   {
     id: 'symptoms',
-    title: "Symptom Tracking",
-    description: "Select your symptoms and let our AI analyze potential causes, risks, and health patterns. Get personalized lifestyle recommendations, preventive measures, and insights about how your daily habits might be affecting your health.",
-    image: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&auto=format&fit=crop&q=60"
+    title: "Symptom Checker",
+    subtitle: "AI-Powered Diagnosis",
+    description: "Describe your symptoms and receive instant AI analysis of potential causes, risks, and health patterns. Get personalized lifestyle recommendations and preventive measures based on your unique health profile.",
+    benefits: ["Instant Analysis", "Risk Assessment", "Preventive Measures"],
+    image: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&auto=format&fit=crop&q=60",
+    icon: "🏥"
   },
   {
     id: 'skin-analysis',
-    title: "Skin Analysis",
-    description: "Upload photos of your skin spots for AI-powered ABCDE analysis (Asymmetry, Border, Color, Diameter, Evolution). Our advanced technology helps with early detection by analyzing changes in moles and skin lesions, providing detailed risk assessments.",
-    image: "https://images.unsplash.com/photo-1505944270255-72b8c68c6a70?w=800&auto=format&fit=crop&q=60"
-  },
-  {
-    id: 'integration',
-    title: "Health App Integration",
-    description: "Connect seamlessly with Apple Health and Google Fit to monitor your vital signs 24/7. Our AI system analyzes your health data in real-time, sending instant alerts for abnormal patterns.",
-    image: "https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=800&auto=format&fit=crop&q=60"
-  },
-  {
-    id: 'calories',
-    title: "Calorie Tracking",
-    description: "Set your health and fitness goals while our AI tracks your nutrition. Simply upload food photos for instant analysis of calories, macronutrients, and portion sizes. Get personalized meal plans and recommendations based on your goals, whether it's weight management, muscle gain, or maintaining a balanced diet.",
-    image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&auto=format&fit=crop&q=60"
-  },
-  {
-    id: 'water',
-    title: "Water Tracking",
-    description: "Get personalized daily water intake goals based on your age, weight, activity level, and climate. Our AI tracks your hydration patterns, sends smart reminders, and adjusts recommendations during exercise, illness, or weather changes. Monitor your hydration status with detailed insights and weekly progress reports.",
-    image: "https://images.unsplash.com/photo-1606938704652-3e588c2c9fd4?w=800&auto=format&fit=crop&q=60"
+    title: "Skin Health Scanner",
+    subtitle: "Early Detection Technology",
+    description: "Upload photos of skin spots for AI-powered ABCDE analysis. Our advanced technology helps with early detection by analyzing changes in moles and skin lesions, providing detailed risk assessments.",
+    benefits: ["Early Detection", "ABCDE Analysis", "Risk Assessment"],
+    image: "https://images.unsplash.com/photo-1505944270255-72b8c68c6a70?w=800&auto=format&fit=crop&q=60",
+    icon: "🔍"
   },
   {
     id: 'medication',
-    title: "Medication Reminders",
+    title: "Smart Medication Tracker",
+    subtitle: "Never Miss a Dose",
     description: "Set up your medication schedule with dosage and timing. Our AI sends smart reminders, tracks your adherence, and alerts you for refills. Monitor side effects and get drug interaction warnings.",
-    image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=60"
+    benefits: ["Smart Reminders", "Adherence Tracking", "Drug Interactions"],
+    image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=60",
+    icon: "💊"
   },
   {
     id: 'reports',
-    title: "Health Reports",
-    description: "Get detailed PDF reports covering your complete health data: lab test analyses, symptom patterns, vital signs, nutrition tracking, hydration levels, medication adherence, and skin analyses. View your health trends with interactive charts and comprehensive wellness statistics.",
-    image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=800&auto=format&fit=crop&q=60"
+    title: "Comprehensive Health Reports",
+    subtitle: "Complete Health Overview",
+    description: "Get detailed PDF reports covering your complete health data: lab test analyses, symptom patterns, vital signs, medication adherence, and skin analyses. View your health trends with interactive charts.",
+    benefits: ["Detailed Reports", "Interactive Charts", "Health Trends"],
+    image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=800&auto=format&fit=crop&q=60",
+    icon: "📊"
   }
 ];
 
-const handleScrollToEarlyAccess = (e: React.MouseEvent) => {
-  e.preventDefault();
-  const element = document.getElementById('coming-soon');
-  if (element) {
-    const offset = 100; // Header height offset
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.scrollY - offset;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    });
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.2
+    }
   }
 };
 
-export const FeaturesSection = () => {
-  return (
-    <section className="py-24 bg-white dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-16">
-          {features.map((feature) => (
-            <div
-              key={feature.id}
-              id={feature.id}
-              className="scroll-mt-24 bg-gray-100/80 dark:bg-gray-800/40 rounded-3xl overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="flex flex-col md:flex-row items-center">
-                <div className="flex-1 p-8 md:p-12">
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                    {feature.title}
-                  </h3>
-                  <p className="text-lg text-gray-600 dark:text-gray-300">
-                    {feature.description}
-                  </p>
-                </div>
-                <div className="w-full md:w-[40%] h-64 md:h-80 relative">
-                  <Image
-                    src={feature.image}
-                    alt={feature.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-cover"
-                    loading="lazy"
-                    quality={75}
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+const itemVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 50,
+    scale: 0.95
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
 
-        {/* Call to Action Section */}
-        <div id="try-xlinic" className="mt-24 text-center scroll-mt-24">
-          <div className="space-y-8">
-            <h2 className="text-4xl font-medium text-gray-900" style={{ fontFamily: 'system-ui' }}>
-              Start Managing Your Health
-            </h2>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-normal" style={{ fontFamily: 'system-ui' }}>
-              Managing your health is now easier with Xlinic.
+const imageVariants = {
+  hidden: { 
+    opacity: 0, 
+    scale: 0.8,
+    rotateY: -15
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    rotateY: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut"
+    }
+  }
+};
+
+const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={itemVariants}
+      className={`scroll-mt-24 ${
+        index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+      } flex flex-col md:flex items-center gap-12`}
+    >
+      {/* Content */}
+      <motion.div 
+        className="flex-1 space-y-6"
+        variants={{
+          hidden: { opacity: 0, x: index % 2 === 0 ? -50 : 50 },
+          visible: { 
+            opacity: 1, 
+            x: 0,
+            transition: { duration: 0.6, delay: 0.2 }
+          }
+        }}
+      >
+        {/* Feature Header */}
+        <motion.div 
+          className="flex items-center gap-4 mb-6"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { 
+              opacity: 1, 
+              y: 0,
+              transition: { duration: 0.5, delay: 0.3 }
+            }
+          }}
+        >
+          <motion.div 
+            className="text-4xl"
+            whileHover={{ 
+              scale: 1.2,
+              rotate: 360,
+              transition: { duration: 0.5 }
+            }}
+          >
+            {feature.icon}
+          </motion.div>
+          <div>
+            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              {feature.title}
+            </h3>
+            <p className="text-lg text-blue-600 dark:text-blue-400 font-medium">
+              {feature.subtitle}
             </p>
-            
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <button
-                onClick={handleScrollToEarlyAccess}
-                className="px-6 py-3 bg-black text-white text-lg font-medium rounded-lg hover:bg-gray-900 transition-colors"
-              >
-                Try Xlinic
-              </button>
-            </div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Description */}
+        <motion.p 
+          className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { 
+              opacity: 1, 
+              y: 0,
+              transition: { duration: 0.5, delay: 0.4 }
+            }
+          }}
+        >
+          {feature.description}
+        </motion.p>
+
+        {/* Benefits */}
+        <motion.div 
+          className="space-y-3"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.5
+              }
+            }
+          }}
+        >
+          {feature.benefits.map((benefit: string, idx: number) => (
+            <motion.div 
+              key={idx} 
+              className="flex items-center gap-3"
+              variants={{
+                hidden: { opacity: 0, x: -20 },
+                visible: { 
+                  opacity: 1, 
+                  x: 0,
+                  transition: { duration: 0.3 }
+                }
+              }}
+            >
+              <motion.div 
+                className="w-2 h-2 bg-blue-600 rounded-full"
+                whileHover={{ scale: 1.5 }}
+              />
+              <span className="text-gray-700 dark:text-gray-300 font-medium">
+                {benefit}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* CTA Button - Conditional for Medication Tracker */}
+        {feature.id === 'medication' ? (
+          <motion.div
+            className="flex items-center gap-3"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.5, delay: 0.6 }
+              }
+            }}
+          >
+            <motion.button 
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+              whileHover={{ 
+                scale: 1.05,
+                boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.4)"
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Download App
+              <motion.svg 
+                className="w-4 h-4" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2 }}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </motion.svg>
+            </motion.button>
+            <motion.div
+              className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+            >
+              <span>📱</span>
+              <span>Available on iOS & Android</span>
+            </motion.div>
+          </motion.div>
+        ) : (
+          <Link href="/auth">
+            <motion.button 
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+              whileHover={{ 
+                scale: 1.05,
+                boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.4)"
+              }}
+              whileTap={{ scale: 0.95 }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { duration: 0.5, delay: 0.6 }
+                }
+              }}
+            >
+              Try Now
+              <motion.svg 
+                className="w-4 h-4" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </motion.svg>
+            </motion.button>
+          </Link>
+        )}
+      </motion.div>
+
+      {/* Image */}
+      <motion.div 
+        className="flex-1"
+        variants={imageVariants}
+      >
+        <motion.div 
+          className="relative rounded-2xl overflow-hidden shadow-2xl"
+          whileHover={{ 
+            scale: 1.02,
+            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+          }}
+          transition={{ duration: 0.3 }}
+        >
+          <Image
+            src={feature.image}
+            alt={feature.title}
+            width={600}
+            height={400}
+            className="w-full h-auto"
+            loading="lazy"
+            quality={85}
+          />
+          {/* Overlay */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"
+            whileHover={{ opacity: 0.3 }}
+            transition={{ duration: 0.3 }}
+          />
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+export const FeaturesSection = () => {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+
+  return (
+    <section ref={sectionRef} className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.h2 
+            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Advanced Health Features
+          </motion.h2>
+          <motion.p 
+            className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            Experience the future of healthcare with our AI-powered tools designed to keep you healthy and informed.
+          </motion.p>
+        </motion.div>
+
+        {/* Features Grid */}
+        <motion.div 
+          className="space-y-20"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          {features.map((feature, index) => (
+            <FeatureCard key={feature.id} feature={feature} index={index} />
+          ))}
+        </motion.div>
+
+        {/* Bottom CTA */}
+        <motion.div 
+          className="mt-24 text-center"
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
+          <motion.div 
+            className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.h2 
+              className="text-4xl font-bold mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+            >
+              Ready to Transform Your Health?
+            </motion.h2>
+            <motion.p 
+              className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 1 }}
+            >
+              Join thousands of users who are already taking control of their health with AI-powered insights.
+            </motion.p>
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 1.2 }}
+            >
+              <Link href="/auth">
+                <motion.button 
+                  className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-gray-100 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Start Free Trial
+                </motion.button>
+              </Link>
+              <motion.button 
+                className="px-8 py-4 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className="flex items-center gap-2">
+                  <span>📱</span>
+                  Download App
+                </span>
+              </motion.button>
+              <Link href="/faq">
+                <motion.button 
+                  className="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Learn More
+                </motion.button>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
