@@ -96,7 +96,7 @@ export default function BlogPost() {
 
   if (!post) {
     return (
-      <div className="min-h-screen py-12 bg-white dark:bg-gray-900">
+      <div className="min-h-screen py-12 bg-gray-200 dark:bg-gray-900">
         <div className="max-w-3xl mx-auto px-4">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Blog post not found
@@ -107,7 +107,7 @@ export default function BlogPost() {
   }
 
   return (
-    <article className="min-h-screen py-12 bg-white dark:bg-gray-900">
+    <article className="min-h-screen py-12 bg-gray-200 dark:bg-gray-900">
       <div className="max-w-3xl mx-auto px-4">
         {/* Header */}
         <header className="mb-8">

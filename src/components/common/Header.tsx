@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const features = [
   {
@@ -27,8 +29,13 @@ const features = [
 export const Header = () => {
   const [isFeatureDropdownOpen, setIsFeatureDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const profileButtonRef = useRef<HTMLButtonElement>(null);
+  const { user, isAuthenticated, logout } = useAuth();
+  const router = useRouter();
 
   // Menü açıkken scroll'u engelle
   useEffect(() => {
@@ -73,6 +80,15 @@ export const Header = () => {
         !buttonRef.current.contains(event.target as Node)
       ) {
         setIsFeatureDropdownOpen(false);
+      }
+      
+      if (
+        profileDropdownRef.current &&
+        profileButtonRef.current &&
+        !profileDropdownRef.current.contains(event.target as Node) &&
+        !profileButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileDropdownOpen(false);
       }
     };
 
@@ -142,7 +158,7 @@ export const Header = () => {
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
-            <a href="/" className="flex items-center">
+            <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center">
               <motion.span 
                 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 bg-clip-text text-transparent relative" 
                 style={{ fontFamily: 'Inter' }}
@@ -167,7 +183,7 @@ export const Header = () => {
                 </motion.span>
                 <span className="relative z-10">Xlinic</span>
               </motion.span>
-            </a>
+            </Link>
           </motion.div>
 
           {/* Desktop Navigation and Buttons */}
@@ -227,8 +243,14 @@ export const Header = () => {
                           transition={{ delay: index * 0.05 }}
                         >
                           <Link
-                            href={feature.href}
+                            href={isAuthenticated ? `/features/${feature.href.replace('#', '')}` : feature.href}
                             onClick={(e) => {
+                              if (isAuthenticated) {
+                                // Giriş yapmış kullanıcılar için ilgili feature sayfasına yönlendir
+                                setIsFeatureDropdownOpen(false);
+                                return;
+                              }
+                              
                               e.preventDefault();
                               setIsFeatureDropdownOpen(false);
                               
@@ -291,18 +313,103 @@ export const Header = () => {
               </Link>
             </motion.div>
 
-            {/* Login Button */}
-            <Link href="/auth">
-              <motion.button
-                className="group relative px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
-                style={{ fontFamily: 'system-ui' }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="relative z-10">Log In</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </motion.button>
-            </Link>
+            {/* Profile Dropdown or Login Button */}
+            {isAuthenticated ? (
+              <div className="relative">
+                <motion.button
+                  ref={profileButtonRef}
+                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                  className="flex items-center space-x-3 px-4 py-2 rounded-xl hover:bg-gray-100 transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                    {user?.name?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                  <span className="text-gray-700 font-medium">{user?.name || 'User'}</span>
+                  <motion.svg
+                    className="w-4 h-4 text-gray-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    animate={{ rotate: isProfileDropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </motion.svg>
+                </motion.button>
+                
+                <AnimatePresence>
+                  {isProfileDropdownOpen && (
+                    <motion.div 
+                      ref={profileDropdownRef}
+                      className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg ring-1 ring-gray-200 focus:outline-none z-50"
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <div className="py-2 space-y-1">
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.05 }}
+                        >
+                          <Link
+                            href="/dashboard"
+                            onClick={() => setIsProfileDropdownOpen(false)}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          >
+                            Dashboard
+                          </Link>
+                        </motion.div>
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 }}
+                        >
+                          <Link
+                            href="/profile"
+                            onClick={() => setIsProfileDropdownOpen(false)}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          >
+                            Profile Settings
+                          </Link>
+                        </motion.div>
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.15 }}
+                        >
+                          <button
+                            onClick={() => {
+                              logout();
+                              setIsProfileDropdownOpen(false);
+                              router.push('/');
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
+                          >
+                            Logout
+                          </button>
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link href="/auth">
+                <motion.button
+                  className="group relative px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  style={{ fontFamily: 'system-ui' }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="relative z-10">Log In</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </motion.button>
+              </Link>
+            )}
           </motion.div>
 
           {/* Mobile Menu Button */}
@@ -377,6 +484,11 @@ export const Header = () => {
                               setIsMobileMenuOpen(false);
                               setIsFeatureDropdownOpen(false);
                               
+                              if (isAuthenticated) {
+                                router.push(`/features/${feature.href.replace('#', '')}`);
+                                return;
+                              }
+                              
                               if (window.location.pathname !== '/') {
                                 sessionStorage.setItem('scrollTarget', feature.href);
                                 window.location.href = '/';
@@ -439,24 +551,69 @@ export const Header = () => {
                   </div>
                 </motion.div>
 
-                {/* Mobile Login Button */}
+                {/* Mobile Profile or Login Button */}
                 <motion.div 
                   className="mt-6"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <Link href="/auth">
-                    <motion.button 
-                      className="group relative w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
-                      style={{ fontFamily: 'system-ui' }}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className="relative z-10">Log In</span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </motion.button>
-                  </Link>
+                  {isAuthenticated ? (
+                    <div className="space-y-2">
+                      <motion.button
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          router.push('/dashboard');
+                        }}
+                        className="flex items-center space-x-3 w-full px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition-all duration-200"
+                        style={{ fontFamily: 'system-ui' }}
+                        whileHover={{ x: 10 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                          {user?.name?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                        <span className="font-medium">{user?.name || 'User'}</span>
+                      </motion.button>
+                      <motion.button
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          router.push('/profile');
+                        }}
+                        className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-all duration-200"
+                        style={{ fontFamily: 'system-ui' }}
+                        whileHover={{ x: 10 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Profile Settings
+                      </motion.button>
+                      <motion.button
+                        onClick={() => {
+                          logout();
+                          setIsMobileMenuOpen(false);
+                          router.push('/');
+                        }}
+                        className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-200"
+                        style={{ fontFamily: 'system-ui' }}
+                        whileHover={{ x: 10 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Logout
+                      </motion.button>
+                    </div>
+                  ) : (
+                    <Link href="/auth">
+                      <motion.button 
+                        className="group relative w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                        style={{ fontFamily: 'system-ui' }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <span className="relative z-10">Log In</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </motion.button>
+                    </Link>
+                  )}
                 </motion.div>
               </div>
             </motion.div>

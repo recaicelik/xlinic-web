@@ -75,7 +75,7 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
 
 export default function FAQPage() {
   return (
-    <main className="min-h-screen pt-12 pb-16 bg-white dark:bg-gray-900">
+    <main className="min-h-screen pt-12 pb-16 bg-gray-200 dark:bg-gray-900">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
