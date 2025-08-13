@@ -128,8 +128,8 @@ export const Header = () => {
   }, []);
 
   return (
-    <motion.header 
-      className="bg-white dark:bg-gray-900 relative z-40 shadow-sm"
+    <motion.header
+      className="bg-gray-200 backdrop-blur-xl border-b border-gray-300 relative z-40"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
@@ -144,7 +144,7 @@ export const Header = () => {
           >
             <a href="/" className="flex items-center">
               <motion.span 
-                className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent" 
+                className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 bg-clip-text text-transparent relative" 
                 style={{ fontFamily: 'Inter' }}
                 whileHover={{ 
                   scale: 1.1,
@@ -152,7 +152,20 @@ export const Header = () => {
                 }}
                 transition={{ duration: 0.3 }}
               >
-                Xlinic
+                <motion.span
+                  className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 bg-clip-text text-transparent"
+                  animate={{
+                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                >
+                  Xlinic
+                </motion.span>
+                <span className="relative z-10">Xlinic</span>
               </motion.span>
             </a>
           </motion.div>
@@ -173,7 +186,7 @@ export const Header = () => {
                   e.stopPropagation();
                   setIsFeatureDropdownOpen(!isFeatureDropdownOpen);
                 }}
-                className="text-xl text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 font-normal"
+                className="text-xl text-gray-700 hover:text-blue-600 flex items-center gap-1 font-normal"
                 style={{ fontFamily: 'system-ui' }}
                 whileHover={{ 
                   scale: 1.05,
@@ -199,7 +212,7 @@ export const Header = () => {
                 {isFeatureDropdownOpen && (
                   <motion.div 
                     ref={dropdownRef}
-                    className="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/10 focus:outline-none z-50"
+                    className="absolute left-0 mt-2 w-64 bg-white rounded-xl shadow-lg ring-1 ring-gray-200 focus:outline-none z-50"
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -238,7 +251,7 @@ export const Header = () => {
                                 }
                               }
                             }}
-                            className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                           >
                             {feature.name}
                           </Link>
@@ -257,7 +270,7 @@ export const Header = () => {
             >
               <Link 
                 href="/blog"
-                className="text-xl text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-normal"
+                className="text-xl text-gray-700 hover:text-blue-600 font-normal"
                 style={{ fontFamily: 'system-ui' }}
               >
                 Blog
@@ -271,7 +284,7 @@ export const Header = () => {
             >
               <Link 
                 href="/faq"
-                className="text-xl text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-normal"
+                className="text-xl text-gray-700 hover:text-blue-600 font-normal"
                 style={{ fontFamily: 'system-ui' }}
               >
                 FAQ
@@ -300,7 +313,7 @@ export const Header = () => {
           >
             <button
               type="button"
-              className="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+              className="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
@@ -322,7 +335,7 @@ export const Header = () => {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div 
-              className="mobile-menu-container md:hidden fixed top-[64px] right-0 w-[300px] h-[calc(100vh-64px)] bg-white dark:bg-gray-900 shadow-[0_0_40px_rgba(0,0,0,0.1)] z-[100] rounded-l-2xl border-l border-gray-100 dark:border-gray-800"
+              className="mobile-menu-container md:hidden fixed top-[64px] right-0 w-[300px] h-[calc(100vh-64px)] bg-white shadow-[0_0_40px_rgba(0,0,0,0.1)] z-[100] rounded-l-2xl border-l border-gray-200"
               initial={{ x: 300, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 300, opacity: 0 }}
@@ -337,25 +350,9 @@ export const Header = () => {
                 >
                   <motion.button
                     onClick={() => {
-                      if (window.location.pathname !== '/') {
-                        sessionStorage.setItem('scrollTarget', '#health-test');
-                        window.location.href = '/';
-                      } else {
-                        const element = document.getElementById('health-test');
-                        if (element) {
-                          const offset = 30;
-                          const elementPosition = element.getBoundingClientRect().top;
-                          const offsetPosition = elementPosition + window.scrollY - offset;
-
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                          });
-                        }
-                      }
-                      setIsMobileMenuOpen(false);
+                      setIsFeatureDropdownOpen(!isFeatureDropdownOpen);
                     }}
-                    className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
+                    className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-all duration-200"
                     style={{ fontFamily: 'system-ui' }}
                     whileHover={{ x: 10 }}
                     whileTap={{ scale: 0.95 }}
@@ -363,13 +360,64 @@ export const Header = () => {
                     Features
                   </motion.button>
 
+                  {/* Mobile Features Dropdown */}
+                  <AnimatePresence>
+                    {isFeatureDropdownOpen && (
+                      <motion.div 
+                        className="ml-4 space-y-1"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {features.map((feature, index) => (
+                          <motion.button
+                            key={feature.name}
+                            onClick={() => {
+                              setIsMobileMenuOpen(false);
+                              setIsFeatureDropdownOpen(false);
+                              
+                              if (window.location.pathname !== '/') {
+                                sessionStorage.setItem('scrollTarget', feature.href);
+                                window.location.href = '/';
+                              } else {
+                                const targetId = feature.href.replace('#', '');
+                                const element = document.getElementById(targetId);
+                                
+                                if (element) {
+                                  const offset = 30;
+                                  const elementPosition = element.getBoundingClientRect().top;
+                                  const offsetPosition = elementPosition + window.scrollY - offset;
+
+                                  window.scrollTo({
+                                    top: offsetPosition,
+                                    behavior: 'smooth'
+                                  });
+                                }
+                              }
+                            }}
+                            className="block w-full text-left px-4 py-2 rounded-lg text-base text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all duration-200"
+                            style={{ fontFamily: 'system-ui' }}
+                            whileHover={{ x: 5 }}
+                            whileTap={{ scale: 0.95 }}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                          >
+                            {feature.name}
+                          </motion.button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
                   <div className="space-y-1.5">
                     <motion.button
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         window.location.href = '/blog';
                       }}
-                      className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
+                      className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-all duration-200"
                       style={{ fontFamily: 'system-ui' }}
                       whileHover={{ x: 10 }}
                       whileTap={{ scale: 0.95 }}
@@ -381,7 +429,7 @@ export const Header = () => {
                         setIsMobileMenuOpen(false);
                         window.location.href = '/faq';
                       }}
-                      className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/40 transition-all duration-200"
+                      className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-all duration-200"
                       style={{ fontFamily: 'system-ui' }}
                       whileHover={{ x: 10 }}
                       whileTap={{ scale: 0.95 }}
