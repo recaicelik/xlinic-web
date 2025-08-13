@@ -351,51 +351,27 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
         variants={imageVariants}
       >
         <motion.div 
-          className="relative rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200"
+          className="flex items-center justify-center"
           whileHover={{ 
-            scale: 1.02,
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+            scale: 1.02
           }}
           transition={{ duration: 0.3 }}
         >
-          <div className="aspect-video flex items-center justify-center p-8">
-            <div className="text-center space-y-4">
-              <motion.div 
-                className="text-6xl mb-4"
-                animate={{ 
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 5, -5, 0]
-                }}
-                transition={{ 
-                  duration: 4, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-              >
-                {feature.icon}
-              </motion.div>
-              <div className="space-y-2">
-                <div className="h-2 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full w-3/4 mx-auto"></div>
-                <div className="h-2 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full w-1/2 mx-auto"></div>
-                <div className="h-2 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full w-2/3 mx-auto"></div>
-              </div>
-              <motion.div 
-                className="flex justify-center space-x-2"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-              </motion.div>
-            </div>
-          </div>
-          {/* Tech overlay */}
           <motion.div 
-            className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent"
-            whileHover={{ opacity: 0.1 }}
-            transition={{ duration: 0.3 }}
-          />
+            className="text-9xl"
+            animate={{ 
+              scale: [1, 1.3, 1],
+              rotate: [0, 10, -10, 0],
+              filter: ["brightness(1)", "brightness(1.4)", "brightness(1)"]
+            }}
+            transition={{ 
+              duration: 6, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          >
+            {feature.icon}
+          </motion.div>
         </motion.div>
       </motion.div>
     </motion.div>
