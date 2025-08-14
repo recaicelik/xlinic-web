@@ -16,12 +16,12 @@ export const HeroSection = () => {
       return { x: `${x}%`, y: `${y}%` };
     };
 
-    const positions = Array.from({ length: 8 }, generateRandomPosition);
+    const positions = Array.from({ length: 12 }, generateRandomPosition);
     setIconPositions(positions);
   }, []);
 
   return (
-    <section className="relative bg-gray-200 text-gray-900 overflow-hidden">
+    <section className="relative bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white overflow-hidden">
       {/* Enhanced Animated Background Pattern */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 opacity-[0.03]" style={{
@@ -235,6 +235,106 @@ export const HeroSection = () => {
               }}
             >
               🔬
+            </motion.div>
+          )}
+
+          {/* Drug Safety Icon */}
+          {iconPositions[8] && (
+            <motion.div
+              className="absolute text-xl opacity-20"
+              style={{
+                left: iconPositions[8].x,
+                top: iconPositions[8].y,
+              }}
+              animate={{
+                y: [0, 22, 0],
+                x: [0, -14, 0],
+                rotate: [0, -4, 0],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{
+                duration: 9.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1.2
+              }}
+            >
+              🛡️
+            </motion.div>
+          )}
+
+          {/* Chronic Disease Management Icon */}
+          {iconPositions[9] && (
+            <motion.div
+              className="absolute text-lg opacity-18"
+              style={{
+                left: iconPositions[9].x,
+                top: iconPositions[9].y,
+              }}
+              animate={{
+                y: [0, -25, 0],
+                x: [0, 16, 0],
+                rotate: [0, 5, 0],
+                scale: [1, 0.95, 1]
+              }}
+              transition={{
+                duration: 10.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 2.2
+              }}
+            >
+              🔄
+            </motion.div>
+          )}
+
+          {/* Health Community Blog Icon */}
+          {iconPositions[10] && (
+            <motion.div
+              className="absolute text-lg opacity-16"
+              style={{
+                left: iconPositions[10].x,
+                top: iconPositions[10].y,
+              }}
+              animate={{
+                y: [0, 18, 0],
+                x: [0, -10, 0],
+                rotate: [0, -3, 0],
+                scale: [1, 1.08, 1]
+              }}
+              transition={{
+                duration: 8.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.7
+              }}
+            >
+              ✍️
+            </motion.div>
+          )}
+
+          {/* Health Reports Icon (Additional) */}
+          {iconPositions[11] && (
+            <motion.div
+              className="absolute text-lg opacity-19"
+              style={{
+                left: iconPositions[11].x,
+                top: iconPositions[11].y,
+              }}
+              animate={{
+                y: [0, -20, 0],
+                x: [0, 12, 0],
+                rotate: [0, 4, 0],
+                scale: [1, 1.05, 1]
+              }}
+              transition={{
+                duration: 11.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1.8
+              }}
+            >
+              📋
             </motion.div>
           )}
 

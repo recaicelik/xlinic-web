@@ -16,11 +16,14 @@ const plans = [
     tickets: 6,
     bonus: 2,
     features: [
-      '6 Analysis Tickets',
-      '2 Bonus Tickets (First month)',
-      'Basic AI Analysis',
-      'Email Support',
-      'Standard Reports'
+      '6 Analysis Credits',
+      '2 Bonus Credits (First month)',
+      'Smart Lab Analysis',
+      'Symptom Analysis',
+      'Skin Health Scanner',
+      'Basic Health Reports',
+      'Community Blog Access',
+      'Mobile App Access (Medication Tracker) - Free'
     ],
     popular: false,
     color: 'from-blue-500 to-blue-600',
@@ -34,13 +37,17 @@ const plans = [
     tickets: 15,
     bonus: 5,
     features: [
-      '15 Analysis Tickets',
-      '5 Bonus Tickets (First month)',
-      'Priority AI Analysis',
-      'Priority Support',
-      'Detailed Reports',
+      '15 Analysis Credits',
+      '5 Bonus Credits (First month)',
+      'Smart Lab Analysis',
+      'Symptom Analysis',
+      'Skin Health Scanner',
+      'Comprehensive Health Reports',
       'Trend Analysis',
-      'Doctor Sharing Feature'
+      'Community Blog Access',
+      'Mobile App Access (Medication Tracker) - Free',
+      'Coming Soon: Drug Safety & Interaction Control',
+      'Coming Soon: Chronic Disease Management'
     ],
     popular: true,
     color: 'from-purple-500 to-purple-600',
@@ -54,15 +61,17 @@ const plans = [
     tickets: 180,
     bonus: 30,
     features: [
-      '180 Analysis Tickets',
-      '30 Bonus Tickets',
-      '2 Months Free',
-      'Priority AI Analysis',
-      '24/7 Priority Support',
-      'Advanced Reports',
+      '180 Analysis Credits',
+      '30 Bonus Credits',
+      'Smart Lab Analysis',
+      'Symptom Analysis',
+      'Skin Health Scanner',
+      'Comprehensive Health Reports',
       'Trend Analysis',
-      'Doctor Sharing Feature',
-      'Personal Health Consultation'
+      'Community Blog Access',
+      'Mobile App Access (Medication Tracker) - Free',
+      'Coming Soon: Drug Safety & Interaction Control',
+      'Coming Soon: Chronic Disease Management'
     ],
     popular: false,
     color: 'from-emerald-500 to-emerald-600',
@@ -70,58 +79,69 @@ const plans = [
   }
 ];
 
-const ticketPricing = [
+const creditPricing = [
+  {
+    feature: 'Smart Lab Analysis',
+    credits: 2,
+    description: 'AI-powered laboratory test analysis'
+  },
   {
     feature: 'Symptom Analysis',
-    tickets: 1,
+    credits: 1,
     description: 'AI-powered symptom assessment'
   },
   {
-    feature: 'Skin Analysis',
-    tickets: 2,
+    feature: 'Skin Health Scanner',
+    credits: 2,
     description: 'ABCDE analysis and risk assessment'
   },
   {
-    feature: 'Test Analysis',
-    tickets: 2,
-    description: 'Laboratory and medical test report analysis'
-  },
-  {
-    feature: 'Long-term Health Report',
-    tickets: 2,
+    feature: 'Health Reports',
+    credits: 1,
     description: 'Comprehensive health trend analysis'
   },
   {
-    feature: 'Medication Tracking',
-    tickets: 0,
-    description: 'Free - Unlimited usage'
+    feature: 'Medication Tracker',
+    credits: 0,
+    description: 'Free - Mobile app only'
   },
   {
-    feature: 'Short-term Reports',
-    tickets: 0,
-    description: 'Free - Weekly summaries'
+    feature: 'Drug Safety & Interaction Control',
+    credits: 2,
+    description: 'Coming Soon - Drug interaction checking'
+  },
+  {
+    feature: 'Chronic Disease Management',
+    credits: 1,
+    description: 'Coming Soon - Diabetes, hypertension, COPD management'
+  },
+  {
+    feature: 'Community Blog Article',
+    credits: -2,
+    description: 'Earn 2 bonus credits for each published article'
   }
 ];
 
 const extraPackages = [
   {
     name: 'Extra Package',
-    tickets: 10,
+    credits: 10,
     price: 12,
     description: 'When your monthly limit is reached'
   },
   {
     name: 'Large Package',
-    tickets: 25,
+    credits: 25,
     price: 25,
     description: 'For intensive usage'
   },
   {
     name: 'Mega Package',
-    tickets: 50,
+    credits: 50,
     price: 45,
     description: 'For corporate usage'
-  }
+  },
+
 ];
 
 export default function PricingPage() {
@@ -148,7 +168,7 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-200 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         {/* Header */}
         <motion.div
@@ -161,7 +181,7 @@ export default function PricingPage() {
             Pricing 💰
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Choose the perfect plan for your health. Pay only for what you use with our ticket system.
+            Choose the perfect plan for your health. Pay only for what you use with our credit system.
           </p>
         </motion.div>
 
@@ -220,7 +240,7 @@ export default function PricingPage() {
 
                   <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-4 mb-6">
                     <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                      {plan.tickets + plan.bonus} Ticket
+                      {plan.tickets + plan.bonus} Credit
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
                       {plan.tickets} + {plan.bonus} Bonus
@@ -272,53 +292,12 @@ export default function PricingPage() {
           ))}
         </motion.div>
 
-        {/* Ticket Pricing */}
-        <motion.div
-          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-                     <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-             Ticket Costs 🎫
-           </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ticketPricing.map((item, index) => (
-              <motion.div
-                key={item.feature}
-                className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 border border-gray-200 dark:border-gray-600"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
-                    {item.feature}
-                  </h3>
-                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    item.tickets === 0 
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                      : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
-                  }`}>
-                                         {item.tickets === 0 ? 'Free' : `${item.tickets} Ticket`}
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {item.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
         {/* Extra Packages */}
         <motion.div
           className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-16"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
         >
                      <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
              Extra Packages 📦
@@ -331,7 +310,7 @@ export default function PricingPage() {
                 className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-xl p-6 border border-orange-200 dark:border-orange-700"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
+                transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
               >
                 <div className="text-center">
@@ -342,7 +321,7 @@ export default function PricingPage() {
                      ${pkg.price}
                    </div>
                   <div className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                    {pkg.tickets} Ticket
+                    {pkg.credits} Credit
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                     {pkg.description}
@@ -351,6 +330,47 @@ export default function PricingPage() {
                      Buy Now
                    </button>
                 </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Credit Pricing */}
+        <motion.div
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+                                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+              Credit Costs 💳
+            </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {creditPricing.map((item, index) => (
+              <motion.div
+                key={item.feature}
+                className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 border border-gray-200 dark:border-gray-600"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                    {item.feature}
+                  </h3>
+                                    <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                    item.credits === 0 
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                      : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                  }`}>
+                    {item.credits === 0 ? 'Free' : `${item.credits} Credit`}
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {item.description}
+                </p>
               </motion.div>
             ))}
           </div>

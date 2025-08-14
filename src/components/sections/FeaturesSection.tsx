@@ -16,7 +16,8 @@ const features = [
     image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&auto=format&fit=crop&q=80",
     icon: "🔬",
     color: "from-blue-500 to-blue-600",
-    glowColor: "from-blue-400/20 via-blue-400/20 to-blue-400/20"
+    glowColor: "from-blue-400/20 via-blue-400/20 to-blue-400/20",
+    href: "#health-test"
   },
   {
     id: 'symptoms',
@@ -27,7 +28,8 @@ const features = [
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
     icon: "🏥",
     color: "from-green-500 to-green-600",
-    glowColor: "from-green-400/20 via-green-400/20 to-green-400/20"
+    glowColor: "from-green-400/20 via-green-400/20 to-green-400/20",
+    href: "#symptoms"
   },
   {
     id: 'skin-analysis',
@@ -38,20 +40,61 @@ const features = [
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
     icon: "🔍",
     color: "from-purple-500 to-purple-600",
-    glowColor: "from-purple-400/20 via-purple-400/20 to-purple-400/20"
+    glowColor: "from-purple-400/20 via-purple-400/20 to-purple-400/20",
+    href: "#skin-analysis"
   },
   {
     id: 'medication',
     title: "Smart Medication Tracker",
-    subtitle: "Never Miss a Dose",
-    description: "Set up your medication schedule with dosage and timing. Our AI sends smart reminders, tracks your adherence, and alerts you for refills. Monitor side effects and get drug interaction warnings.",
+    subtitle: "Mobile App Only",
+    description: "Set up your medication schedule with dosage and timing. Our AI sends smart reminders, tracks your adherence, and alerts you for refills. Monitor side effects and get drug interaction warnings. Available exclusively on our mobile app.",
     benefits: ["Smart Reminders", "Adherence Tracking", "Drug Interactions"],
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
     icon: "💊",
     color: "from-orange-500 to-orange-600",
-    glowColor: "from-orange-400/20 via-orange-400/20 to-orange-400/20"
+    glowColor: "from-orange-400/20 via-orange-400/20 to-orange-400/20",
+    mobileOnly: true,
+    href: "#medication"
   },
-
+  {
+    id: 'drug-safety',
+    title: "Drug Safety & Interaction Control",
+    subtitle: "Coming Soon",
+    description: "Comprehensive drug information database with interaction checking, dosage guidance, and side effect monitoring. Report adverse reactions and get alerts for drug recalls. Our AI-powered system ensures medication safety for patients, doctors, and pharmacists.",
+    benefits: ["Drug Interactions", "Side Effect Monitoring", "Safety Alerts", "Adverse Reporting"],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
+    icon: "🛡️",
+    color: "from-teal-500 to-teal-600",
+    glowColor: "from-teal-400/20 via-teal-400/20 to-teal-400/20",
+    comingSoon: true,
+    href: "#drug-safety"
+  },
+  {
+    id: 'chronic-disease',
+    title: "Chronic Disease Management",
+    subtitle: "Coming Soon",
+    description: "Comprehensive management system for diabetes, hypertension, COPD, and other chronic conditions. Features device integration, health data analysis, personalized care plans, and progress tracking.",
+    benefits: ["Device Integration", "Personalized Care", "Progress Tracking"],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
+    icon: "🫀",
+    color: "from-indigo-500 to-indigo-600",
+    glowColor: "from-indigo-400/20 via-indigo-400/20 to-indigo-400/20",
+    comingSoon: true,
+    href: "#chronic-disease"
+  },
+  {
+    id: 'community-blog',
+    title: "Health Community Blog",
+    subtitle: "Share Your Journey",
+    description: "Share your health experiences, tips, and success stories with our community. Write blog posts about your health journey and earn 2 bonus tickets for each published article. Connect with others on similar health paths.",
+    benefits: ["Community Sharing", "Bonus Tickets", "Health Stories", "Peer Support"],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
+    icon: "✍️",
+    color: "from-pink-500 to-pink-600",
+    glowColor: "from-pink-400/20 via-pink-400/20 to-pink-400/20",
+    comingSoon: false,
+    href: "#community-blog"
+  },
   {
     id: 'reports',
     title: "Comprehensive Health Reports",
@@ -61,7 +104,8 @@ const features = [
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
     icon: "📊",
     color: "from-red-500 to-red-600",
-    glowColor: "from-red-400/20 via-red-400/20 to-red-400/20"
+    glowColor: "from-red-400/20 via-red-400/20 to-red-400/20",
+    href: "#reports"
   }
 ];
 
@@ -250,7 +294,7 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
           ))}
         </motion.div>
 
-                {/* CTA Button - Conditional for Medication Tracker */}
+                {/* CTA Button - Conditional for different features */}
         {feature.id === 'medication' ? (
           <motion.div
             className="flex items-center gap-3"
@@ -307,6 +351,104 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
               <span>Available on iOS & Android</span>
             </motion.div>
           </motion.div>
+        ) : feature.mobileOnly ? (
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.5, delay: 0.6 }
+              }
+            }}
+          >
+            <div className="bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 px-6 py-3 rounded-lg font-semibold border border-orange-200 dark:border-orange-700 cursor-not-allowed">
+              <div className="flex items-center gap-2">
+                <motion.span
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 5, -5, 0]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  📱
+                </motion.span>
+                  Mobile App Only
+                </div>
+              </div>
+            </motion.div>
+          ) : feature.comingSoon ? (
+            <Link href={feature.href}>
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    transition: { duration: 0.5, delay: 0.6 }
+                  }
+                }}
+              >
+                <div className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-6 py-3 rounded-lg font-semibold border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors cursor-pointer">
+                  <div className="flex items-center gap-2">
+                    <motion.span
+                      animate={{ 
+                        scale: [1, 1.2, 1],
+                        rotate: [0, 5, -5, 0]
+                      }}
+                      transition={{ 
+                        duration: 2, 
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      🚀
+                    </motion.span>
+                    Coming Soon
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+        ) : feature.id === 'community-blog' ? (
+          <Link href="#community-blog">
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { duration: 0.5, delay: 0.6 }
+                }
+              }}
+            >
+              <AnimatedGradient
+                type="button"
+                className="shadow-lg"
+                duration={4}
+                colors={feature.color.split(' ')}
+              >
+                Visit Blog
+                <motion.svg 
+                  className="w-4 h-4" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                  whileHover={{ 
+                    x: 5, 
+                    rotate: 360,
+                    scale: 1.2,
+                    transition: { duration: 0.3 }
+                  }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </motion.svg>
+              </AnimatedGradient>
+            </motion.div>
+          </Link>
         ) : (
           <Link href="/auth">
             <motion.div
@@ -384,7 +526,7 @@ export const FeaturesSection = () => {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section ref={sectionRef} className="pt-0 pb-12 bg-gray-200">
+    <section ref={sectionRef} className="pt-0 pb-12 bg-gray-100 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div 

@@ -157,7 +157,7 @@ export default function SymptomsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-200 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
         <div className="auth-loading"></div>
       </div>
     );
@@ -168,7 +168,7 @@ export default function SymptomsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-200 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         {/* Page Header */}

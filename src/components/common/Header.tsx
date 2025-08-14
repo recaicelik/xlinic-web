@@ -23,6 +23,22 @@ const features = [
   {
     name: 'Medication Tracker',
     href: '#medication',
+    mobileOnly: true
+  },
+  {
+    name: 'Drug Safety & Interaction Control',
+    href: '#drug-safety',
+    comingSoon: true
+  },
+  {
+    name: 'Chronic Disease Management',
+    href: '#chronic-disease',
+    comingSoon: true
+  },
+  {
+    name: 'Health Community Blog',
+    href: '#community-blog',
+    comingSoon: false
   },
   {
     name: 'Health Reports',
@@ -246,48 +262,150 @@ export const Header = () => {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.05 }}
                         >
-                          <Link
-                            href={isAuthenticated ? `/features/${feature.href.replace('#', '')}` : feature.href}
-                            onClick={(e) => {
-                              if (isAuthenticated) {
-                                // Medication tracker için özel yönlendirme
-                                if (feature.href === '#medication') {
+                          {feature.mobileOnly ? (
+                            isAuthenticated ? (
+                              <div
+                                className="block px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 transition-colors cursor-not-allowed"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span>{feature.name}</span>
+                                  <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                    Mobile Only
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <Link
+                                href={feature.href}
+                                onClick={(e) => {
                                   e.preventDefault();
                                   setIsFeatureDropdownOpen(false);
-                                  toast.success('Medication Tracker is available in our mobile app! 📱');
+                                  
+                                  if (window.location.pathname !== '/') {
+                                    sessionStorage.setItem('scrollTarget', feature.href);
+                                    window.location.href = '/';
+                                  } else {
+                                    const targetId = feature.href.replace('#', '');
+                                    const element = document.getElementById(targetId);
+                                    
+                                    if (element) {
+                                      const offset = 30;
+                                      const elementPosition = element.getBoundingClientRect().top;
+                                      const offsetPosition = elementPosition + window.scrollY - offset;
+
+                                      window.scrollTo({
+                                        top: offsetPosition,
+                                        behavior: 'smooth'
+                                      });
+                                    }
+                                  }
+                                }}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span>{feature.name}</span>
+                                  <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                    Mobile Only
+                                  </span>
+                                </div>
+                              </Link>
+                            )
+                          ) : feature.comingSoon ? (
+                            isAuthenticated ? (
+                              <div
+                                className="block px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 transition-colors cursor-not-allowed"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span>{feature.name}</span>
+                                  <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                    Coming Soon
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <Link
+                                href={feature.href}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setIsFeatureDropdownOpen(false);
+                                  
+                                  if (window.location.pathname !== '/') {
+                                    sessionStorage.setItem('scrollTarget', feature.href);
+                                    window.location.href = '/';
+                                  } else {
+                                    const targetId = feature.href.replace('#', '');
+                                    const element = document.getElementById(targetId);
+                                    
+                                    if (element) {
+                                      const offset = 30;
+                                      const elementPosition = element.getBoundingClientRect().top;
+                                      const offsetPosition = elementPosition + window.scrollY - offset;
+
+                                      window.scrollTo({
+                                        top: offsetPosition,
+                                        behavior: 'smooth'
+                                      });
+                                    }
+                                  }
+                                }}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span>{feature.name}</span>
+                                  <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                    Coming Soon
+                                  </span>
+                                </div>
+                              </Link>
+                            )
+                          ) : (
+                            <Link
+                              href={feature.href}
+                              onClick={(e) => {
+                                if (isAuthenticated) {
+                                  // Coming soon features ve medication tracker için özel yönlendirme
+                                  if (feature.comingSoon || feature.mobileOnly) {
+                                    e.preventDefault();
+                                    setIsFeatureDropdownOpen(false);
+                                    if (feature.mobileOnly) {
+                                      toast.success('Medication Tracker is available in our mobile app! 📱');
+                                    } else {
+                                      toast.success('This feature is coming soon! 🚀');
+                                    }
+                                    return;
+                                  }
+                                  // Giriş yapmış kullanıcılar için ilgili feature sayfasına yönlendir
+                                  setIsFeatureDropdownOpen(false);
                                   return;
                                 }
-                                // Giriş yapmış kullanıcılar için ilgili feature sayfasına yönlendir
-                                setIsFeatureDropdownOpen(false);
-                                return;
-                              }
-                              
-                              e.preventDefault();
-                              setIsFeatureDropdownOpen(false);
-                              
-                              if (window.location.pathname !== '/') {
-                                sessionStorage.setItem('scrollTarget', feature.href);
-                                window.location.href = '/';
-                              } else {
-                                const targetId = feature.href.replace('#', '');
-                                const element = document.getElementById(targetId);
                                 
-                                if (element) {
-                                  const offset = 30;
-                                  const elementPosition = element.getBoundingClientRect().top;
-                                  const offsetPosition = elementPosition + window.scrollY - offset;
+                                e.preventDefault();
+                                setIsFeatureDropdownOpen(false);
+                                
+                                if (window.location.pathname !== '/') {
+                                  sessionStorage.setItem('scrollTarget', feature.href);
+                                  window.location.href = '/';
+                                } else {
+                                  const targetId = feature.href.replace('#', '');
+                                  const element = document.getElementById(targetId);
+                                  
+                                  if (element) {
+                                    const offset = 30;
+                                    const elementPosition = element.getBoundingClientRect().top;
+                                    const offsetPosition = elementPosition + window.scrollY - offset;
 
-                                  window.scrollTo({
-                                    top: offsetPosition,
-                                    behavior: 'smooth'
-                                  });
+                                    window.scrollTo({
+                                      top: offsetPosition,
+                                      behavior: 'smooth'
+                                    });
+                                  }
                                 }
-                              }
-                            }}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                          >
-                            {feature.name}
-                          </Link>
+                              }}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                            >
+                              {feature.name}
+                            </Link>
+                          )}
                         </motion.div>
                       ))}
                     </div>
@@ -302,7 +420,7 @@ export const Header = () => {
               whileTap={{ scale: 0.95 }}
             >
               <Link 
-                href="/pricing"
+                href="/blog"
                 className="text-xl text-gray-700 hover:text-blue-600 font-normal"
                 style={{ fontFamily: 'system-ui' }}
               >
@@ -503,51 +621,151 @@ export const Header = () => {
                         transition={{ duration: 0.2 }}
                       >
                         {features.map((feature, index) => (
-                          <motion.button
+                          <motion.div
                             key={feature.name}
-                            onClick={() => {
-                              setIsMobileMenuOpen(false);
-                              setIsFeatureDropdownOpen(false);
-                              
-                              if (isAuthenticated) {
-                                // Medication tracker için özel yönlendirme
-                                if (feature.href === '#medication') {
-                                  toast.success('Medication Tracker is available in our mobile app! 📱');
-                                  return;
-                                }
-                                router.push(`/features/${feature.href.replace('#', '')}`);
-                                return;
-                              }
-                              
-                              if (window.location.pathname !== '/') {
-                                sessionStorage.setItem('scrollTarget', feature.href);
-                                window.location.href = '/';
-                              } else {
-                                const targetId = feature.href.replace('#', '');
-                                const element = document.getElementById(targetId);
-                                
-                                if (element) {
-                                  const offset = 30;
-                                  const elementPosition = element.getBoundingClientRect().top;
-                                  const offsetPosition = elementPosition + window.scrollY - offset;
-
-                                  window.scrollTo({
-                                    top: offsetPosition,
-                                    behavior: 'smooth'
-                                  });
-                                }
-                              }
-                            }}
-                            className="block w-full text-left px-4 py-2 rounded-lg text-base text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all duration-200"
-                            style={{ fontFamily: 'system-ui' }}
-                            whileHover={{ x: 5 }}
-                            whileTap={{ scale: 0.95 }}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.05 }}
                           >
-                            {feature.name}
-                          </motion.button>
+                            {feature.mobileOnly ? (
+                              isAuthenticated ? (
+                                <div className="block w-full text-left px-4 py-2 rounded-lg text-base text-gray-500 bg-gray-50 cursor-not-allowed">
+                                  <div className="flex items-center justify-between">
+                                    <span>{feature.name}</span>
+                                    <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                      Mobile Only
+                                    </span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <motion.button
+                                  onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsFeatureDropdownOpen(false);
+                                    
+                                    if (window.location.pathname !== '/') {
+                                      sessionStorage.setItem('scrollTarget', feature.href);
+                                      window.location.href = '/';
+                                    } else {
+                                      const targetId = feature.href.replace('#', '');
+                                      const element = document.getElementById(targetId);
+                                      
+                                      if (element) {
+                                        const offset = 30;
+                                        const elementPosition = element.getBoundingClientRect().top;
+                                        const offsetPosition = elementPosition + window.scrollY - offset;
+
+                                        window.scrollTo({
+                                          top: offsetPosition,
+                                          behavior: 'smooth'
+                                        });
+                                      }
+                                    }
+                                  }}
+                                  className="block w-full text-left px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-blue-50 transition-colors"
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <span>{feature.name}</span>
+                                    <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                      Mobile Only
+                                    </span>
+                                  </div>
+                                </motion.button>
+                              )
+                            ) : feature.comingSoon ? (
+                              isAuthenticated ? (
+                                <div className="block w-full text-left px-4 py-2 rounded-lg text-base text-gray-500 bg-gray-50 cursor-not-allowed">
+                                  <div className="flex items-center justify-between">
+                                    <span>{feature.name}</span>
+                                    <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                      Coming Soon
+                                    </span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <motion.button
+                                  onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsFeatureDropdownOpen(false);
+                                    
+                                    if (window.location.pathname !== '/') {
+                                      sessionStorage.setItem('scrollTarget', feature.href);
+                                      window.location.href = '/';
+                                    } else {
+                                      const targetId = feature.href.replace('#', '');
+                                      const element = document.getElementById(targetId);
+                                      
+                                      if (element) {
+                                        const offset = 30;
+                                        const elementPosition = element.getBoundingClientRect().top;
+                                        const offsetPosition = elementPosition + window.scrollY - offset;
+
+                                        window.scrollTo({
+                                          top: offsetPosition,
+                                          behavior: 'smooth'
+                                        });
+                                      }
+                                    }
+                                  }}
+                                  className="block w-full text-left px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-blue-50 transition-colors"
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <span>{feature.name}</span>
+                                    <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
+                                      Coming Soon
+                                    </span>
+                                  </div>
+                                </motion.button>
+                              )
+                            ) : (
+                              <motion.button
+                                onClick={() => {
+                                  setIsMobileMenuOpen(false);
+                                  setIsFeatureDropdownOpen(false);
+                                  
+                                  if (isAuthenticated) {
+                                    // Coming soon features ve medication tracker için özel yönlendirme
+                                    if (feature.comingSoon || feature.mobileOnly) {
+                                      if (feature.mobileOnly) {
+                                        toast.success('Medication Tracker is available in our mobile app! 📱');
+                                      } else {
+                                        toast.success('This feature is coming soon! 🚀');
+                                      }
+                                      return;
+                                    }
+                                    router.push(`/features/${feature.href.replace('#', '')}`);
+                                    return;
+                                  }
+                                  
+                                  // Kullanıcı giriş yapmadığında tüm feature'lara tıklayabilir
+                                  if (window.location.pathname !== '/') {
+                                    sessionStorage.setItem('scrollTarget', feature.href);
+                                    window.location.href = '/';
+                                  } else {
+                                    const targetId = feature.href.replace('#', '');
+                                    const element = document.getElementById(targetId);
+                                    
+                                    if (element) {
+                                      const offset = 30;
+                                      const elementPosition = element.getBoundingClientRect().top;
+                                      const offsetPosition = elementPosition + window.scrollY - offset;
+
+                                      window.scrollTo({
+                                        top: offsetPosition,
+                                        behavior: 'smooth'
+                                      });
+                                    }
+                                  }
+                                }}
+                                className="block w-full text-left px-4 py-2 rounded-lg text-base text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all duration-200"
+                                style={{ fontFamily: 'system-ui' }}
+                                whileHover={{ x: 5 }}
+                                whileTap={{ scale: 0.95 }}
+                              >
+                                {feature.name}
+                              </motion.button>
+                            )}
+                          </motion.div>
                         ))}
                       </motion.div>
                     )}
