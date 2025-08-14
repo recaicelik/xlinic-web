@@ -9,40 +9,40 @@ import { useRouter } from 'next/navigation';
 
 const features = [
   {
-    name: 'Smart Test Analysis',
-    href: '#health-test',
+    name: 'Smart Lab Analysis',
+    href: '/features/health-test',
   },
   {
-    name: 'Symptom Tracking',
-    href: '#symptoms',
+    name: 'Symptom Analysis',
+    href: '/features/symptoms',
   },
   {
-    name: 'Skin Analysis',
-    href: '#skin-analysis',
+    name: 'Skin Health Scanner',
+    href: '/features/skin-analysis',
   },
   {
-    name: 'Medication Tracker',
+    name: 'Smart Medication Tracker',
     href: '#medication',
     mobileOnly: true
   },
   {
     name: 'Drug Safety & Interaction Control',
-    href: '#drug-safety',
+    href: '/features/drug-safety',
     comingSoon: true
   },
   {
     name: 'Chronic Disease Management',
-    href: '#chronic-disease',
+    href: '/features/chronic-disease',
     comingSoon: true
   },
   {
     name: 'Health Community Blog',
-    href: '#community-blog',
+    href: '/blog',
     comingSoon: false
   },
   {
-    name: 'Health Reports',
-    href: '#reports',
+    name: 'Comprehensive Health Reports',
+    href: '/features/reports',
   }
 ];
 

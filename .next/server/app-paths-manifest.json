@@ -1,10 +1,5 @@
 {
   "/page": "app/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
   "/auth/page": "app/auth/page.js",
-  "/features/reports/page": "app/features/reports/page.js",
-  "/profile/page": "app/profile/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/faq/page": "app/faq/page.js",
-  "/contact/page": "app/contact/page.js"
+  "/dashboard/page": "app/dashboard/page.js"
 }

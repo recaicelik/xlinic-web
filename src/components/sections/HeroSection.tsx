@@ -420,104 +420,107 @@ export const HeroSection = () => {
             allowing you to track your progress and make informed decisions anytime, anywhere.
           </motion.p>
 
-          {/* Enhanced Key Benefits */}
+          {/* Modern Quick Stats */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-            className="flex flex-wrap justify-center gap-6 mb-16"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
           >
             <motion.div 
-              className="flex items-center gap-4 px-8 py-4 bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.05, y: -5, rotateY: 5 }}
-              whileTap={{ scale: 0.95 }}
+              className="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-md border border-gray-200/50 p-5 hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
             >
-              <motion.div 
-                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden relative"
-                whileHover={{ rotate: 360, scale: 1.2 }}
-                transition={{ duration: 0.5 }}
-              >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600"
-                  animate={{
-                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
-                <svg className="w-5 h-5 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </motion.div>
-              <span className="text-sm font-semibold text-gray-800">Instant Results</span>
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <motion.div 
+                    className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg"
+                    whileHover={{ rotate: 360, scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </motion.div>
+                  <h3 className="text-base font-semibold text-gray-800">Accuracy Rate</h3>
+                </div>
+                <motion.div 
+                  className="text-xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  99.9%
+                </motion.div>
+              </div>
+              <p className="text-gray-600 text-sm leading-relaxed">AI-powered analysis with industry-leading precision</p>
             </motion.div>
             
             <motion.div 
-              className="flex items-center gap-4 px-8 py-4 bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.05, y: -5, rotateY: -5 }}
-              whileTap={{ scale: 0.95 }}
+              className="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-md border border-gray-200/50 p-5 hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
             >
-              <motion.div 
-                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden relative"
-                whileHover={{ rotate: 360, scale: 1.2 }}
-                transition={{ duration: 0.5 }}
-              >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-600"
-                  animate={{
-                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
-                <svg className="w-5 h-5 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </motion.div>
-              <span className="text-sm font-semibold text-gray-800">AI-Powered</span>
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <motion.div 
+                    className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-lg"
+                    whileHover={{ rotate: 360, scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </motion.div>
+                  <h3 className="text-base font-semibold text-gray-800">Instant Results</h3>
+                </div>
+                <motion.div 
+                  className="text-xl font-bold bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text text-transparent"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                >
+                  &lt;30s
+                </motion.div>
+              </div>
+              <p className="text-gray-600 text-sm leading-relaxed">Get comprehensive analysis in under 30 seconds</p>
             </motion.div>
             
             <motion.div 
-              className="flex items-center gap-4 px-8 py-4 bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.05, y: -5, rotateY: 5 }}
-              whileTap={{ scale: 0.95 }}
+              className="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-md border border-gray-200/50 p-5 hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.9 }}
             >
-              <motion.div 
-                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden relative"
-                whileHover={{ rotate: 360, scale: 1.2 }}
-                transition={{ duration: 0.5 }}
-              >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-500 to-purple-600"
-                  animate={{
-                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
-                <svg className="w-5 h-5 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </motion.div>
-              <span className="text-sm font-semibold text-gray-800">Secure & Private</span>
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <motion.div 
+                    className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-purple-500 to-purple-600 shadow-lg"
+                    whileHover={{ rotate: 360, scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </motion.div>
+                  <h3 className="text-base font-semibold text-gray-800">Secure & Private</h3>
+                </div>
+                <motion.div 
+                  className="text-xl font-bold bg-gradient-to-r from-purple-500 to-purple-600 bg-clip-text text-transparent"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                >
+                  100%
+                </motion.div>
+              </div>
+              <p className="text-gray-600 text-sm leading-relaxed">End-to-end encryption for your health data</p>
             </motion.div>
           </motion.div>
 
