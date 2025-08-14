@@ -1,5 +1,10 @@
 {
-  "/blog/page": "app/blog/page.js",
   "/page": "app/page.js",
-  "/features/symptoms/page": "app/features/symptoms/page.js"
+  "/blog/page": "app/blog/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/features/health-test/page": "app/features/health-test/page.js",
+  "/features/skin-analysis/page": "app/features/skin-analysis/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/features/reports/page": "app/features/reports/page.js",
+  "/auth/page": "app/auth/page.js"
 }

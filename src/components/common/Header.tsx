@@ -10,15 +10,15 @@ import { useRouter } from 'next/navigation';
 const features = [
   {
     name: 'Smart Lab Analysis',
-    href: '/features/health-test',
+    href: '#health-test',
   },
   {
     name: 'Symptom Analysis',
-    href: '/features/symptoms',
+    href: '#symptoms',
   },
   {
     name: 'Skin Health Scanner',
-    href: '/features/skin-analysis',
+    href: '#skin-analysis',
   },
   {
     name: 'Smart Medication Tracker',
@@ -27,22 +27,22 @@ const features = [
   },
   {
     name: 'Drug Safety & Interaction Control',
-    href: '/features/drug-safety',
+    href: '#drug-safety',
     comingSoon: true
   },
   {
     name: 'Chronic Disease Management',
-    href: '/features/chronic-disease',
+    href: '#chronic-disease',
     comingSoon: true
   },
   {
     name: 'Health Community Blog',
-    href: '/blog',
+    href: '#community-blog',
     comingSoon: false
   },
   {
     name: 'Comprehensive Health Reports',
-    href: '/features/reports',
+    href: '#reports',
   }
 ];
 
@@ -362,11 +362,12 @@ export const Header = () => {
                             <Link
                               href={feature.href}
                               onClick={(e) => {
+                                e.preventDefault();
+                                setIsFeatureDropdownOpen(false);
+                                
                                 if (isAuthenticated) {
                                   // Coming soon features ve medication tracker için özel yönlendirme
                                   if (feature.comingSoon || feature.mobileOnly) {
-                                    e.preventDefault();
-                                    setIsFeatureDropdownOpen(false);
                                     if (feature.mobileOnly) {
                                       toast.success('Medication Tracker is available in our mobile app! 📱');
                                     } else {
@@ -374,14 +375,18 @@ export const Header = () => {
                                     }
                                     return;
                                   }
+                                  // Blog için özel işlem - giriş yapmış kullanıcılar blog sayfasına gitsin
+                                  if (feature.href === '#community-blog') {
+                                    router.push('/blog');
+                                    return;
+                                  }
                                   // Giriş yapmış kullanıcılar için ilgili feature sayfasına yönlendir
-                                  setIsFeatureDropdownOpen(false);
+                                  const featurePath = feature.href.replace('#', '/features/');
+                                  router.push(featurePath);
                                   return;
                                 }
                                 
-                                e.preventDefault();
-                                setIsFeatureDropdownOpen(false);
-                                
+                                // Giriş yapmamış kullanıcılar için ana sayfada scroll
                                 if (window.location.pathname !== '/') {
                                   sessionStorage.setItem('scrollTarget', feature.href);
                                   window.location.href = '/';
@@ -733,7 +738,13 @@ export const Header = () => {
                                       }
                                       return;
                                     }
-                                    router.push(`/features/${feature.href.replace('#', '')}`);
+                                    // Blog için özel işlem - giriş yapmış kullanıcılar blog sayfasına gitsin
+                                    if (feature.href === '#community-blog') {
+                                      router.push('/blog');
+                                      return;
+                                    }
+                                    const featurePath = feature.href.replace('#', '/features/');
+                                    router.push(featurePath);
                                     return;
                                   }
                                   
