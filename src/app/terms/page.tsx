@@ -92,6 +92,9 @@ export default function TermsPage() {
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
                   Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the Service, to understand our practices regarding the collection and use of your personal information.
                 </p>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                  <strong>Long-term Data Storage:</strong> By using Xlinic, you acknowledge that your health data will be stored indefinitely to provide you with comprehensive health tracking and trend analysis. This long-term storage enables you to monitor your health progress over time and make informed decisions based on your complete health history.
+                </p>
               </section>
 
               <section className="mb-8">

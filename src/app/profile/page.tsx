@@ -261,13 +261,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordData({
-      ...passwordData,
-      [e.target.name]: e.target.value
-    });
-  };
-
   const handleSaveProfile = async () => {
     try {
       // Simulate API call
@@ -281,28 +274,7 @@ export default function ProfilePage() {
     }
   };
 
-  const handleChangePassword = async () => {
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error('New passwords do not match');
-      return;
-    }
 
-    if (passwordData.newPassword.length < 6) {
-      toast.error('Password must be at least 6 characters');
-      return;
-    }
-
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast.success('Password changed successfully!');
-      setIsChangingPassword(false);
-      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    } catch (error) {
-      toast.error('Failed to change password');
-    }
-  };
 
   const handleDeleteAccount = async () => {
     try {
@@ -852,119 +824,6 @@ export default function ProfilePage() {
                         Save Changes
                       </motion.button>
                     </motion.div>
-                  )}
-                </motion.div>
-              )}
-
-              {activeTab === 'security' && (
-                <motion.div
-                  key="security"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8"
-                >
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      Security Settings
-                    </h2>
-                    <motion.button
-                      onClick={() => setIsChangingPassword(!isChangingPassword)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {isChangingPassword ? 'Cancel' : 'Change Password'}
-                    </motion.button>
-                  </div>
-
-                  {isChangingPassword ? (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      className="space-y-6"
-                    >
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Current Password
-                        </label>
-                        <input
-                          type="password"
-                          name="currentPassword"
-                          value={passwordData.currentPassword}
-                          onChange={handlePasswordChange}
-                          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          New Password
-                        </label>
-                        <input
-                          type="password"
-                          name="newPassword"
-                          value={passwordData.newPassword}
-                          onChange={handlePasswordChange}
-                          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Confirm New Password
-                        </label>
-                        <input
-                          type="password"
-                          name="confirmPassword"
-                          value={passwordData.confirmPassword}
-                          onChange={handlePasswordChange}
-                          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                        />
-                      </div>
-
-                      <div className="flex justify-end space-x-4">
-                        <motion.button
-                          onClick={() => {
-                            setIsChangingPassword(false);
-                            setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-                          }}
-                          className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          Cancel
-                        </motion.button>
-                        <motion.button
-                          onClick={handleChangePassword}
-                          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          Change Password
-                        </motion.button>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <div className="space-y-6">
-                      <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                        <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                          Password Security
-                        </h3>
-                        <p className="text-blue-700 dark:text-blue-300 text-sm">
-                          Keep your password strong and unique. Consider using a password manager for better security.
-                        </p>
-                      </div>
-
-                      <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                        <h3 className="font-medium text-green-900 dark:text-green-100 mb-2">
-                          Two-Factor Authentication
-                        </h3>
-                        <p className="text-green-700 dark:text-green-300 text-sm">
-                          Add an extra layer of security to your account. Coming soon!
-                        </p>
-                      </div>
-                    </div>
                   )}
                 </motion.div>
               )}

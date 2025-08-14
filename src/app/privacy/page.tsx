@@ -133,9 +133,19 @@ export default function PrivacyPage() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">8. Data Retention</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">8. Data Retention and Long-term Storage</h2>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  We retain your personal information for as long as necessary to provide our services and fulfill the purposes outlined in this policy. You may request deletion of your data at any time.
+                  <strong>Long-term Health Data Storage:</strong> We retain your health data indefinitely to provide you with comprehensive health tracking and trend analysis. This long-term storage allows you to:
+                </p>
+                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4 space-y-2">
+                  <li>Track your health progress over time</li>
+                  <li>Compare results from different periods</li>
+                  <li>Identify long-term health trends and patterns</li>
+                  <li>Make informed decisions based on historical data</li>
+                  <li>Share comprehensive health history with healthcare providers</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                  Your health data is securely stored with enterprise-grade backup systems, ensuring it's never lost and always accessible when you need it. You maintain complete control over your data and can access, download, or delete it at any time.
                 </p>
               </section>
 

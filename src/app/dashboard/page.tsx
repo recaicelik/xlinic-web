@@ -84,6 +84,90 @@ export default function DashboardPage() {
           </p>
         </motion.div>
 
+        {/* Subscription Status */}
+        <motion.div
+          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                          <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Subscription Status 💳
+                </h2>
+                <Link href="/pricing">
+                  <motion.button
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Change Plan
+                  </motion.button>
+                </Link>
+              </div>
+            
+            {user?.subscription ? (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                    {user.subscription.plan}
+                  </div>
+                                     <div className="text-sm text-gray-600 dark:text-gray-400">
+                     Current Plan
+                   </div>
+                </div>
+                
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">
+                    {user.subscription.tickets - user.subscription.usedTickets + user.subscription.bonusTickets}
+                  </div>
+                                     <div className="text-sm text-gray-600 dark:text-gray-400">
+                     Remaining Tickets
+                   </div>
+                </div>
+                
+                <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">
+                    {user.subscription.usedTickets}
+                  </div>
+                                     <div className="text-sm text-gray-600 dark:text-gray-400">
+                     Used Tickets
+                   </div>
+                </div>
+                
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
+                    {user.subscription.bonusTickets}
+                  </div>
+                                     <div className="text-sm text-gray-600 dark:text-gray-400">
+                     Bonus Tickets
+                   </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <div className="text-6xl mb-4">💳</div>
+                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                   No subscription yet
+                 </h3>
+                 <p className="text-gray-600 dark:text-gray-400 mb-4">
+                   Choose a plan to access all features of AI-powered health analysis
+                 </p>
+                 <Link href="/pricing">
+                   <motion.button
+                     className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
+                     whileHover={{ scale: 1.05 }}
+                     whileTap={{ scale: 0.95 }}
+                   >
+                     Choose Plan
+                   </motion.button>
+                 </Link>
+              </div>
+            )}
+          </div>
+        </motion.div>
+
         {/* Features Grid */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"

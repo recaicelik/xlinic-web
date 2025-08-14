@@ -21,6 +21,10 @@ const features = [
     href: '#skin-analysis',
   },
   {
+    name: 'Medication Tracker',
+    href: '#medication',
+  },
+  {
     name: 'Health Reports',
     href: '#reports',
   }
@@ -246,6 +250,13 @@ export const Header = () => {
                             href={isAuthenticated ? `/features/${feature.href.replace('#', '')}` : feature.href}
                             onClick={(e) => {
                               if (isAuthenticated) {
+                                // Medication tracker için özel yönlendirme
+                                if (feature.href === '#medication') {
+                                  e.preventDefault();
+                                  setIsFeatureDropdownOpen(false);
+                                  toast.success('Medication Tracker is available in our mobile app! 📱');
+                                  return;
+                                }
                                 // Giriş yapmış kullanıcılar için ilgili feature sayfasına yönlendir
                                 setIsFeatureDropdownOpen(false);
                                 return;
@@ -285,13 +296,13 @@ export const Header = () => {
               </AnimatePresence>
             </div>
 
-            {/* Blog Link */}
+            {/* Pricing Link */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <Link 
-                href="/blog"
+                href="/pricing"
                 className="text-xl text-gray-700 hover:text-blue-600 font-normal"
                 style={{ fontFamily: 'system-ui' }}
               >
@@ -499,6 +510,11 @@ export const Header = () => {
                               setIsFeatureDropdownOpen(false);
                               
                               if (isAuthenticated) {
+                                // Medication tracker için özel yönlendirme
+                                if (feature.href === '#medication') {
+                                  toast.success('Medication Tracker is available in our mobile app! 📱');
+                                  return;
+                                }
                                 router.push(`/features/${feature.href.replace('#', '')}`);
                                 return;
                               }

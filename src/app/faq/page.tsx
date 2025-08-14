@@ -31,6 +31,18 @@ const faqs = [
   {
     question: "Can I share results with my doctor?",
     answer: "Yes, you can easily share your analysis results and health data with your doctor. You can create detailed reports in PDF format and share them with anyone you want."
+  },
+  {
+    question: "How long is my health data stored?",
+    answer: "Your health data is securely stored indefinitely, allowing you to track your long-term health trends and progress. You have complete control over your data and can access, download, or delete it at any time."
+  },
+  {
+    question: "Can I access my historical health data?",
+    answer: "Absolutely! Xlinic maintains a comprehensive history of all your health data, including test results, symptom tracking, and analysis reports. You can view trends over time and compare results from different periods to better understand your health journey."
+  },
+  {
+    question: "Is my health data backed up?",
+    answer: "Yes, your health data is automatically backed up with enterprise-grade security. We use multiple redundant systems to ensure your valuable health information is never lost and is always accessible when you need it."
   }
 ];
 

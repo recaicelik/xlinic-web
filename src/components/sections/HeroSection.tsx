@@ -111,6 +111,8 @@ export const HeroSection = () => {
             </motion.div>
           )}
 
+
+
           {/* Medication Tracker Icon */}
           {iconPositions[3] && (
             <motion.div
@@ -314,7 +316,8 @@ export const HeroSection = () => {
           >
             Transform your health journey with cutting-edge AI technology. 
             Get instant analysis, personalized insights, and comprehensive health tracking 
-            that adapts to your unique needs.
+            that adapts to your unique needs. Your health data is securely stored for long-term access, 
+            allowing you to track your progress and make informed decisions anytime, anywhere.
           </motion.p>
 
           {/* Enhanced Key Benefits */}

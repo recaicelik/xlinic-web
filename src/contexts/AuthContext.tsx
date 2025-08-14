@@ -7,6 +7,35 @@ interface User {
   email: string;
   name: string;
   avatar?: string;
+  phone?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  height?: string;
+  weight?: string;
+  bloodType?: string;
+  allergies?: string;
+  chronicConditions?: string;
+  medications?: string;
+  familyHistory?: string;
+  lifestyle?: {
+    smoking: string;
+    alcohol: string;
+    exercise: string;
+    diet: string;
+  };
+  medicalHistory?: string;
+  currentSymptoms?: string;
+  lastCheckup?: string;
+  insuranceProvider?: string;
+  subscription?: {
+    plan: string;
+    status: 'active' | 'inactive' | 'cancelled';
+    startDate: string;
+    endDate: string;
+    tickets: number;
+    usedTickets: number;
+    bonusTickets: number;
+  };
 }
 
 interface AuthContextType {
@@ -16,6 +45,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   signup: (email: string, password: string, name: string) => Promise<boolean>;
   logout: () => void;
+  updateProfile: (userData: Partial<User>) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -62,7 +92,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         id: '1',
         email: email,
         name: email.split('@')[0], // Use email prefix as name
-        avatar: `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=2563eb&color=fff`
+        avatar: `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=2563eb&color=fff`,
+        subscription: {
+          plan: 'Premium Plan',
+          status: 'active',
+          startDate: '2024-01-01',
+          endDate: '2024-02-01',
+          tickets: 15,
+          usedTickets: 3,
+          bonusTickets: 5
+        }
       };
       
       setUser(mockUser);
@@ -88,7 +127,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         id: Date.now().toString(),
         email: email,
         name: name,
-        avatar: `https://ui-avatars.com/api/?name=${name}&background=2563eb&color=fff`
+        avatar: `https://ui-avatars.com/api/?name=${name}&background=2563eb&color=fff`,
+        subscription: {
+          plan: 'Standard Plan',
+          status: 'active',
+          startDate: '2024-01-01',
+          endDate: '2024-02-01',
+          tickets: 6,
+          usedTickets: 0,
+          bonusTickets: 2
+        }
       };
       
       setUser(mockUser);
@@ -108,13 +156,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem('xlinic_user');
   };
 
+  const updateProfile = async (userData: Partial<User>): Promise<boolean> => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      if (user) {
+        const updatedUser = { ...user, ...userData };
+        setUser(updatedUser);
+        localStorage.setItem('xlinic_user', JSON.stringify(updatedUser));
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Profile update error:', error);
+      return false;
+    }
+  };
+
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user,
     isLoading,
     login,
     signup,
-    logout
+    logout,
+    updateProfile
   };
 
   return (

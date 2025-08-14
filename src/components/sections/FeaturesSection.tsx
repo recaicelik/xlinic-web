@@ -51,12 +51,13 @@ const features = [
     color: "from-orange-500 to-orange-600",
     glowColor: "from-orange-400/20 via-orange-400/20 to-orange-400/20"
   },
+
   {
     id: 'reports',
     title: "Comprehensive Health Reports",
     subtitle: "Complete Health Overview",
-    description: "Get detailed PDF reports covering your complete health data: lab test analyses, symptom patterns, vital signs, medication adherence, and skin analyses. View your health trends with interactive charts.",
-    benefits: ["Detailed Reports", "Interactive Charts", "Health Trends"],
+    description: "Get detailed PDF reports covering your complete health data: lab test analyses, symptom patterns, vital signs, medication adherence, and skin analyses. View your health trends with interactive charts. All your data is securely stored for long-term access, allowing you to track your health journey over time and make informed decisions based on historical trends.",
+    benefits: ["Detailed Reports", "Interactive Charts", "Health Trends", "Long-term Storage"],
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
     icon: "📊",
     color: "from-red-500 to-red-600",
@@ -249,7 +250,7 @@ const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
           ))}
         </motion.div>
 
-        {/* CTA Button - Conditional for Medication Tracker */}
+                {/* CTA Button - Conditional for Medication Tracker */}
         {feature.id === 'medication' ? (
           <motion.div
             className="flex items-center gap-3"
