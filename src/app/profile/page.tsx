@@ -6,13 +6,164 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
+// Custom Date Picker Component
+const CustomDatePicker = ({ value, onChange, disabled, placeholder }: {
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+  placeholder?: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(value ? new Date(value) : null);
+
+  // Close calendar when disabled
+  useEffect(() => {
+    if (disabled && isOpen) {
+      setIsOpen(false);
+    }
+  }, [disabled, isOpen]);
+
+  const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
+  const today = new Date();
+
+  const handleDateSelect = (day: number) => {
+    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    setSelectedDate(newDate);
+    onChange(newDate.toISOString().split('T')[0]);
+    setIsOpen(false);
+  };
+
+  const goToPreviousMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  };
+
+  const goToNextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  };
+
+  const goToToday = () => {
+    setCurrentDate(today);
+  };
+
+  const monthNames = [
+    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+  ];
+
+  const dayNames = ['Pzr', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+
+  return (
+    <div className="relative">
+      <input
+        type="text"
+        value={value ? new Date(value).toLocaleDateString('tr-TR') : ''}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        readOnly
+        disabled={disabled}
+        placeholder={placeholder}
+        className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 text-base ${
+          disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+        }`}
+        style={{ minHeight: '48px' }}
+      />
+      
+      {isOpen && (
+        <div className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-50 w-80">
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <button
+              onClick={goToPreviousMonth}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            >
+              ←
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-gray-900 dark:text-white">
+                {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+              </span>
+              <button
+                onClick={goToToday}
+                className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Bugün
+              </button>
+            </div>
+            <button
+              onClick={goToNextMonth}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            >
+              →
+            </button>
+          </div>
+
+          {/* Days of Week */}
+          <div className="grid grid-cols-7 gap-1 p-2">
+            {dayNames.map(day => (
+              <div key={day} className="text-center text-sm font-medium text-gray-500 dark:text-gray-400 py-2">
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Grid */}
+          <div className="grid grid-cols-7 gap-1 p-2">
+            {/* Previous month days */}
+            {Array.from({ length: firstDayOfMonth }, (_, i) => (
+              <div key={`prev-${i}`} className="text-center text-gray-400 dark:text-gray-600 py-2">
+                {new Date(currentDate.getFullYear(), currentDate.getMonth(), -firstDayOfMonth + i + 1).getDate()}
+              </div>
+            ))}
+            
+            {/* Current month days */}
+            {Array.from({ length: daysInMonth }, (_, i) => {
+              const day = i + 1;
+              const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+              const isSelected = selectedDate && 
+                selectedDate.getDate() === day && 
+                selectedDate.getMonth() === currentDate.getMonth() && 
+                selectedDate.getFullYear() === currentDate.getFullYear();
+              const isToday = today.getDate() === day && 
+                today.getMonth() === currentDate.getMonth() && 
+                today.getFullYear() === currentDate.getFullYear();
+              
+              return (
+                <button
+                  key={day}
+                  onClick={() => handleDateSelect(day)}
+                  className={`text-center py-2 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors ${
+                    isSelected 
+                      ? 'bg-blue-600 text-white' 
+                      : isToday 
+                        ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-semibold'
+                        : 'text-gray-900 dark:text-white'
+                  }`}
+                >
+                  {day}
+                </button>
+              );
+            })}
+            
+            {/* Next month days */}
+            {Array.from({ length: 42 - firstDayOfMonth - daysInMonth }, (_, i) => (
+              <div key={`next-${i}`} className="text-center text-gray-400 dark:text-gray-600 py-2">
+                {i + 1}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function ProfilePage() {
   const { user, isAuthenticated, isLoading, updateProfile, logout } = useAuth();
   const router = useRouter();
   
   const [activeTab, setActiveTab] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -22,15 +173,28 @@ export default function ProfilePage() {
     dateOfBirth: '',
     gender: '',
     height: '',
-    weight: '',
-    emergencyContact: ''
+    weight: ''
   });
 
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+  const [healthData, setHealthData] = useState({
+    bloodType: '',
+    allergies: '',
+    chronicConditions: '',
+    medications: '',
+    familyHistory: '',
+    lifestyle: {
+      smoking: '',
+      alcohol: '',
+      exercise: '',
+      diet: ''
+    },
+    medicalHistory: '',
+    currentSymptoms: '',
+    lastCheckup: '',
+    insuranceProvider: ''
   });
+
+
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -47,8 +211,25 @@ export default function ProfilePage() {
         dateOfBirth: user.dateOfBirth || '',
         gender: user.gender || '',
         height: user.height || '',
-        weight: user.weight || '',
-        emergencyContact: user.emergencyContact || ''
+        weight: user.weight || ''
+      });
+      
+      setHealthData({
+        bloodType: user.bloodType || '',
+        allergies: user.allergies || '',
+        chronicConditions: user.chronicConditions || '',
+        medications: user.medications || '',
+        familyHistory: user.familyHistory || '',
+        lifestyle: {
+          smoking: user.lifestyle?.smoking || '',
+          alcohol: user.lifestyle?.alcohol || '',
+          exercise: user.lifestyle?.exercise || '',
+          diet: user.lifestyle?.diet || ''
+        },
+        medicalHistory: user.medicalHistory || '',
+        currentSymptoms: user.currentSymptoms || '',
+        lastCheckup: user.lastCheckup || '',
+        insuranceProvider: user.insuranceProvider || ''
       });
     }
   }, [user]);
@@ -58,6 +239,26 @@ export default function ProfilePage() {
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handleHealthDataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    if (name.startsWith('lifestyle.')) {
+      const lifestyleField = name.split('.')[1];
+      setHealthData(prev => ({
+        ...prev,
+        lifestyle: {
+          ...prev.lifestyle,
+          [lifestyleField]: value
+        }
+      }));
+    } else {
+      setHealthData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,7 +331,7 @@ export default function ProfilePage() {
 
   const tabs = [
     { id: 'profile', name: 'Profile Information', icon: '👤' },
-    { id: 'security', name: 'Security Settings', icon: '🔒' },
+    { id: 'health', name: 'Health Information', icon: '🏥' },
     { id: 'preferences', name: 'Preferences', icon: '⚙️' },
     { id: 'account', name: 'Account Management', icon: '🛠️' }
   ];
@@ -224,7 +425,9 @@ export default function ProfilePage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         disabled={!isEditing}
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
+                        className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                          !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                        }`}
                       />
                     </div>
 
@@ -238,7 +441,9 @@ export default function ProfilePage() {
                         value={formData.email}
                         onChange={handleInputChange}
                         disabled={!isEditing}
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
+                        className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                          !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                        }`}
                       />
                     </div>
 
@@ -252,7 +457,9 @@ export default function ProfilePage() {
                         value={formData.phone}
                         onChange={handleInputChange}
                         disabled={!isEditing}
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
+                        className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                          !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                        }`}
                       />
                     </div>
 
@@ -260,13 +467,11 @@ export default function ProfilePage() {
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Date of Birth
                       </label>
-                      <input
-                        type="date"
-                        name="dateOfBirth"
+                      <CustomDatePicker
                         value={formData.dateOfBirth}
-                        onChange={handleInputChange}
+                        onChange={(value) => setFormData({ ...formData, dateOfBirth: value })}
                         disabled={!isEditing}
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
+                        placeholder="Doğum tarihinizi seçin"
                       />
                     </div>
 
@@ -279,7 +484,9 @@ export default function ProfilePage() {
                         value={formData.gender}
                         onChange={handleInputChange}
                         disabled={!isEditing}
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
+                        className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                          !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                        }`}
                       >
                         <option value="">Select gender</option>
                         <option value="male">Male</option>
@@ -299,7 +506,9 @@ export default function ProfilePage() {
                         value={formData.height}
                         onChange={handleInputChange}
                         disabled={!isEditing}
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
+                        className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                          !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                        }`}
                       />
                     </div>
 
@@ -313,23 +522,310 @@ export default function ProfilePage() {
                         value={formData.weight}
                         onChange={handleInputChange}
                         disabled={!isEditing}
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
+                        className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                          !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                        }`}
                       />
                     </div>
 
-                    <div className="md:col-span-2">
+
+                  </div>
+
+                  {isEditing && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-6 flex justify-end space-x-4"
+                    >
+                      <motion.button
+                        onClick={() => setIsEditing(false)}
+                        className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Cancel
+                      </motion.button>
+                      <motion.button
+                        onClick={handleSaveProfile}
+                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Save Changes
+                      </motion.button>
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
+
+              {activeTab === 'health' && (
+                <motion.div
+                  key="health"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8"
+                >
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                      Health Information
+                    </h2>
+                    <motion.button
+                      onClick={() => setIsEditing(!isEditing)}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {isEditing ? 'Cancel' : 'Edit Health Info'}
+                    </motion.button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Basic Health Info */}
+                    <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Emergency Contact
+                        Blood Type
                       </label>
-                      <input
-                        type="text"
-                        name="emergencyContact"
-                        value={formData.emergencyContact}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        placeholder="Name and phone number"
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
-                      />
+                                             <select
+                         name="bloodType"
+                         value={healthData.bloodType}
+                         onChange={handleHealthDataChange}
+                         disabled={!isEditing}
+                         className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                           !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                         }`}
+                       >
+                        <option value="">Select blood type</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                      </select>
+                    </div>
+
+                                         <div>
+                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                         Last Checkup Date
+                       </label>
+                       <CustomDatePicker
+                         value={healthData.lastCheckup}
+                         onChange={(value) => setHealthData({ ...healthData, lastCheckup: value })}
+                         disabled={!isEditing}
+                         placeholder="Son kontrol tarihini seçin"
+                       />
+                     </div>
+
+                    {/* Lifestyle Section */}
+                    <div className="md:col-span-2">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Lifestyle Information</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Smoking Status
+                          </label>
+                                                     <select
+                             name="lifestyle.smoking"
+                             value={healthData.lifestyle.smoking}
+                             onChange={handleHealthDataChange}
+                             disabled={!isEditing}
+                             className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                               !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                             }`}
+                           >
+                            <option value="">Select status</option>
+                            <option value="never">Never smoked</option>
+                            <option value="former">Former smoker</option>
+                            <option value="current">Current smoker</option>
+                            <option value="occasional">Occasional smoker</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Alcohol Consumption
+                          </label>
+                                                     <select
+                             name="lifestyle.alcohol"
+                             value={healthData.lifestyle.alcohol}
+                             onChange={handleHealthDataChange}
+                             disabled={!isEditing}
+                             className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                               !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                             }`}
+                           >
+                            <option value="">Select frequency</option>
+                            <option value="never">Never</option>
+                            <option value="rarely">Rarely</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="frequent">Frequent</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Exercise Frequency
+                          </label>
+                                                     <select
+                             name="lifestyle.exercise"
+                             value={healthData.lifestyle.exercise}
+                             onChange={handleHealthDataChange}
+                             disabled={!isEditing}
+                             className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                               !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                             }`}
+                           >
+                            <option value="">Select frequency</option>
+                            <option value="never">Never</option>
+                            <option value="rarely">Rarely (1-2 times/month)</option>
+                            <option value="sometimes">Sometimes (1-2 times/week)</option>
+                            <option value="regular">Regular (3-4 times/week)</option>
+                            <option value="daily">Daily</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Diet Type
+                          </label>
+                                                     <select
+                             name="lifestyle.diet"
+                             value={healthData.lifestyle.diet}
+                             onChange={handleHealthDataChange}
+                             disabled={!isEditing}
+                             className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 ${
+                               !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                             }`}
+                           >
+                            <option value="">Select diet</option>
+                            <option value="omnivore">Omnivore</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="keto">Keto</option>
+                            <option value="paleo">Paleo</option>
+                            <option value="mediterranean">Mediterranean</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Medical Information */}
+                    <div className="md:col-span-2">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Medical Information</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Allergies
+                          </label>
+                                                     <textarea
+                             name="allergies"
+                             value={healthData.allergies}
+                             onChange={handleHealthDataChange}
+                             disabled={!isEditing}
+                             rows={3}
+                             placeholder="List any allergies (food, medication, environmental)"
+                             className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 resize-none ${
+                               !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                             }`}
+                           />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Chronic Conditions
+                          </label>
+                                                     <textarea
+                             name="chronicConditions"
+                             value={healthData.chronicConditions}
+                             onChange={handleHealthDataChange}
+                             disabled={!isEditing}
+                             rows={3}
+                             placeholder="List any chronic health conditions"
+                             className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 resize-none ${
+                               !isEditing ? 'cursor-not-allowed opacity-60' : ''
+                             }`}
+                           />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Current Medications
+                          </label>
+                          <textarea
+                            name="medications"
+                            value={healthData.medications}
+                            onChange={handleHealthDataChange}
+                            disabled={!isEditing}
+                            rows={3}
+                            placeholder="List current medications and dosages"
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 resize-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Family Medical History
+                          </label>
+                          <textarea
+                            name="familyHistory"
+                            value={healthData.familyHistory}
+                            onChange={handleHealthDataChange}
+                            disabled={!isEditing}
+                            rows={3}
+                            placeholder="Relevant family medical history"
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 resize-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Past Medical History
+                          </label>
+                          <textarea
+                            name="medicalHistory"
+                            value={healthData.medicalHistory}
+                            onChange={handleHealthDataChange}
+                            disabled={!isEditing}
+                            rows={3}
+                            placeholder="Significant past medical events, surgeries, hospitalizations"
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 resize-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Current Symptoms
+                          </label>
+                          <textarea
+                            name="currentSymptoms"
+                            value={healthData.currentSymptoms}
+                            onChange={handleHealthDataChange}
+                            disabled={!isEditing}
+                            rows={3}
+                            placeholder="Any current symptoms or concerns"
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600 resize-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Insurance Provider
+                          </label>
+                          <input
+                            type="text"
+                            name="insuranceProvider"
+                            value={healthData.insuranceProvider}
+                            onChange={handleHealthDataChange}
+                            disabled={!isEditing}
+                            placeholder="Insurance company name"
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -508,16 +1004,7 @@ export default function ProfilePage() {
                       </label>
                     </div>
 
-                    <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
-                      <div>
-                        <h3 className="font-medium text-gray-900 dark:text-white">Dark Mode</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Use dark theme for better eye comfort</p>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" className="sr-only peer" />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      </label>
-                    </div>
+
                   </div>
                 </motion.div>
               )}
@@ -621,3 +1108,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+

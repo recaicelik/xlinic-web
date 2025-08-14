@@ -7,59 +7,60 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    name: ''
-  });
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmailSent, setIsEmailSent] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   
-  const { login, signup, isLoading } = useAuth();
+  const { login } = useAuth();
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleMagicLink = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     setMessage(null);
 
     try {
-      let success = false;
+      // Simulate Supabase magic link sending
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      if (isLogin) {
-        success = await login(formData.email, formData.password);
-      } else {
-        success = await signup(formData.email, formData.password, formData.name);
-      }
-
-      if (success) {
-        setMessage({ type: 'success', text: isLogin ? 'Login successful!' : 'Account created successfully!' });
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1000);
-      } else {
-        setMessage({ type: 'error', text: isLogin ? 'Login failed. Please try again.' : 'Signup failed. Please try again.' });
-      }
+      // For demo purposes, we'll simulate success
+      setIsEmailSent(true);
+      setMessage({ 
+        type: 'success', 
+        text: 'Magic link sent! Check your email and click the link to sign in.' 
+      });
+      
+      // In real implementation, you would call Supabase auth.signInWithOtp()
+      // const { error } = await supabase.auth.signInWithOtp({
+      //   email: email,
+      //   options: {
+      //     emailRedirectTo: `${window.location.origin}/auth/callback`
+      //   }
+      // });
+      
     } catch (error) {
-      setMessage({ type: 'error', text: 'An error occurred. Please try again.' });
+      setMessage({ type: 'error', text: 'Failed to send magic link. Please try again.' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleDemoLogin = async () => {
+    setIsLoading(true);
+    try {
+      await login('demo@xlinic.com', 'demo');
+      router.push('/dashboard');
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Demo login failed. Please try again.' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const toggleMode = () => {
-    setIsLogin(!isLogin);
+  const handleResendEmail = () => {
+    setIsEmailSent(false);
     setMessage(null);
-    setFormData({ email: '', password: '', name: '' });
-  };
-
-  const handleSkip = async () => {
-    await login('demo@xlinic.com', 'demo');
-    router.push('/dashboard');
   };
 
   return (
@@ -79,7 +80,30 @@ export default function AuthPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            Xlinic
+            <motion.span 
+              className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 bg-clip-text text-transparent relative" 
+              style={{ fontFamily: 'Inter' }}
+              whileHover={{ 
+                scale: 1.1,
+                filter: "brightness(1.2)"
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.span
+                className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 bg-clip-text text-transparent"
+                animate={{
+                  backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              >
+                Xlinic
+              </motion.span>
+              <span className="relative z-10">Xlinic</span>
+            </motion.span>
           </motion.div>
           
           <motion.h1
@@ -88,7 +112,7 @@ export default function AuthPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            {isLogin ? 'Welcome back' : 'Create your account'}
+            {isEmailSent ? 'Check your email' : 'Welcome to Xlinic'}
           </motion.h1>
           
           <motion.p
@@ -97,7 +121,10 @@ export default function AuthPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            {isLogin ? 'Sign in to continue to your health dashboard' : 'Join Xlinic to start your health journey'}
+            {isEmailSent 
+              ? 'We\'ve sent you a magic link to sign in securely'
+              : 'Enter your email to get started with AI-powered health insights'
+            }
           </motion.p>
         </div>
 
@@ -115,151 +142,151 @@ export default function AuthPage() {
           )}
         </AnimatePresence>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <AnimatePresence mode="wait">
-            {!isLogin && (
+        <AnimatePresence mode="wait">
+          {!isEmailSent ? (
+            <motion.form 
+              onSubmit={handleMagicLink} 
+              className="auth-form"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
               <motion.div
                 className="form-group"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
               >
-                <label htmlFor="name" className="form-label">
-                  Full name
+                <label htmlFor="email" className="form-label">
+                  Email address
                 </label>
                 <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="form-input"
-                  placeholder="Enter your full name"
-                  required={!isLogin}
+                  placeholder="Enter your email address"
+                  required
+                  disabled={isLoading}
                 />
               </motion.div>
-            )}
-          </AnimatePresence>
 
-          <motion.div
-            className="form-group"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <label htmlFor="email" className="form-label">
-              Email address
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="form-input"
-              placeholder="Enter your email"
-              required
-            />
-          </motion.div>
-
-          <motion.div
-            className="form-group"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className="form-input"
-              placeholder="Enter your password"
-              required
-            />
-          </motion.div>
-
-          <motion.button
-            type="submit"
-            className="auth-button"
-            disabled={isLoading}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            {isLoading ? (
-              <span className="auth-loading"></span>
-            ) : (
-              isLogin ? 'Sign in' : 'Create account'
-            )}
-          </motion.button>
-        </form>
-
-        <motion.button
-          onClick={handleSkip}
-          className="auth-skip-button"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          Skip to demo
-        </motion.button>
+              <motion.button
+                type="submit"
+                className="auth-button"
+                disabled={isLoading || !email}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {isLoading ? (
+                  <span className="auth-loading"></span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <span>✨</span>
+                    Send Magic Link
+                  </span>
+                )}
+              </motion.button>
+            </motion.form>
+          ) : (
+            <motion.div
+              className="email-sent-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.div
+                className="email-sent-icon"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              >
+                ✉️
+              </motion.div>
+              
+              <motion.p
+                className="email-sent-text"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                We've sent a secure magic link to:
+              </motion.p>
+              
+              <motion.div
+                className="email-display"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                {email}
+              </motion.div>
+              
+              <motion.button
+                onClick={handleResendEmail}
+                className="resend-button"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Didn't receive it? Resend
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <motion.div
           className="auth-divider"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.6 }}
         >
           <span>or</span>
         </motion.div>
+
+        <motion.button
+          onClick={handleDemoLogin}
+          className="auth-demo-button"
+          disabled={isLoading}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <span className="flex items-center justify-center gap-2">
+            <span>🚀</span>
+            Try Demo Mode
+          </span>
+        </motion.button>
 
         <motion.div
           className="auth-footer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.8 }}
         >
-          {isLogin ? (
-            <>
-              Don't have an account?{' '}
-              <button
-                onClick={toggleMode}
-                className="auth-link"
-              >
-                Sign up
-              </button>
-            </>
-          ) : (
-            <>
-              Already have an account?{' '}
-              <button
-                onClick={toggleMode}
-                className="auth-link"
-              >
-                Sign in
-              </button>
-            </>
-          )}
-        </motion.div>
-
-        <motion.div
-          className="text-center mt-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-        >
-          <Link href="/" className="auth-link text-sm">
-            ← Back to home
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            By continuing, you agree to our{' '}
+            <Link href="/terms" className="auth-link">
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link href="/privacy" className="auth-link">
+              Privacy Policy
+            </Link>
+          </p>
+          
+          <Link href="/" className="auth-link text-sm flex items-center justify-center gap-1">
+            <span>←</span>
+            Back to home
           </Link>
         </motion.div>
       </motion.div>

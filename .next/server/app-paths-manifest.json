@@ -1,9 +1,7 @@
 {
-  "/page": "app/page.js",
-  "/features/reports/page": "app/features/reports/page.js",
-  "/auth/page": "app/auth/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/profile/page": "app/profile/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/faq/page": "app/faq/page.js"
+  "/auth/page": "app/auth/page.js",
+  "/terms/page": "app/terms/page.js",
+  "/privacy/page": "app/privacy/page.js"
 }

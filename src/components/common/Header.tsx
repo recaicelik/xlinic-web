@@ -313,6 +313,20 @@ export const Header = () => {
               </Link>
             </motion.div>
 
+            {/* Contact Link */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link 
+                href="/contact"
+                className="text-xl text-gray-700 hover:text-blue-600 font-normal"
+                style={{ fontFamily: 'system-ui' }}
+              >
+                Contact
+              </Link>
+            </motion.div>
+
             {/* Profile Dropdown or Login Button */}
             {isAuthenticated ? (
               <div className="relative">
@@ -547,6 +561,18 @@ export const Header = () => {
                       whileTap={{ scale: 0.95 }}
                     >
                       FAQ
+                    </motion.button>
+                    <motion.button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        window.location.href = '/contact';
+                      }}
+                      className="block w-full text-left px-4 py-2.5 rounded-xl text-lg text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-all duration-200"
+                      style={{ fontFamily: 'system-ui' }}
+                      whileHover={{ x: 10 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Contact
                     </motion.button>
                   </div>
                 </motion.div>

@@ -11,16 +11,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/blog/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/blog/page.js"
-    ],
-    "/faq/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/faq/page.js"
-    ],
     "/auth/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -31,25 +21,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/page.js"
     ],
-    "/features/health-test/page": [
+    "/terms/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/features/health-test/page.js"
+      "static/chunks/app/terms/page.js"
     ],
-    "/features/symptoms/page": [
+    "/privacy/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/features/symptoms/page.js"
+      "static/chunks/app/privacy/page.js"
     ],
-    "/features/skin-analysis/page": [
+    "/blog/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/features/skin-analysis/page.js"
+      "static/chunks/app/blog/page.js"
     ],
-    "/features/reports/page": [
+    "/faq/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/features/reports/page.js"
+      "static/chunks/app/faq/page.js"
     ],
     "/profile/page": [
       "static/chunks/webpack.js",
