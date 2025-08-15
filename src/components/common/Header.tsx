@@ -55,6 +55,10 @@ export const Header = () => {
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const profileButtonRef = useRef<HTMLButtonElement>(null);
   const { user, isAuthenticated, logout } = useAuth();
+  
+  // Debug authentication state
+  console.log('Header: isAuthenticated:', isAuthenticated);
+  console.log('Header: user:', user);
   const router = useRouter();
 
   // Menü açıkken scroll'u engelle

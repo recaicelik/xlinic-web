@@ -12,7 +12,7 @@ export default function AuthPage() {
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   
-  const { login } = useAuth();
+  const { sendMagicLink } = useAuth();
   const router = useRouter();
 
   const handleMagicLink = async (e: React.FormEvent) => {
@@ -21,23 +21,20 @@ export default function AuthPage() {
     setMessage(null);
 
     try {
-      // Simulate Supabase magic link sending
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const result = await sendMagicLink(email);
       
-      // For demo purposes, we'll simulate success
-      setIsEmailSent(true);
-      setMessage({ 
-        type: 'success', 
-        text: 'Magic link sent! Check your email and click the link to sign in.' 
-      });
-      
-      // In real implementation, you would call Supabase auth.signInWithOtp()
-      // const { error } = await supabase.auth.signInWithOtp({
-      //   email: email,
-      //   options: {
-      //     emailRedirectTo: `${window.location.origin}/auth/callback`
-      //   }
-      // });
+      if (result.success) {
+        setIsEmailSent(true);
+        setMessage({ 
+          type: 'success', 
+          text: 'Magic link sent! Check your email and click the link to sign in.' 
+        });
+      } else {
+        setMessage({ 
+          type: 'error', 
+          text: result.error || 'Failed to send magic link. Please try again.' 
+        });
+      }
       
     } catch (error) {
       setMessage({ type: 'error', text: 'Failed to send magic link. Please try again.' });
@@ -49,8 +46,16 @@ export default function AuthPage() {
   const handleDemoLogin = async () => {
     setIsLoading(true);
     try {
-      await login('demo@xlinic.com', 'demo');
-      router.push('/dashboard');
+      const result = await sendMagicLink('demo@xlinic.com');
+      if (result.success) {
+        setIsEmailSent(true);
+        setMessage({ 
+          type: 'success', 
+          text: 'Demo magic link sent! Check your email and click the link to sign in.' 
+        });
+      } else {
+        setMessage({ type: 'error', text: 'Demo login failed. Please try again.' });
+      }
     } catch (error) {
       setMessage({ type: 'error', text: 'Demo login failed. Please try again.' });
     } finally {

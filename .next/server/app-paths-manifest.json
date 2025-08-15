@@ -1,10 +1,8 @@
 {
-  "/page": "app/page.js",
+  "/auth/page": "app/auth/page.js",
+  "/auth/callback/page": "app/auth/callback/page.js",
   "/blog/page": "app/blog/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/features/health-test/page": "app/features/health-test/page.js",
-  "/features/skin-analysis/page": "app/features/skin-analysis/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/features/reports/page": "app/features/reports/page.js",
-  "/auth/page": "app/auth/page.js"
+  "/features/health-test/page": "app/features/health-test/page.js",
+  "/profile/page": "app/profile/page.js"
 }
